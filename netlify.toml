@@ -1,3 +1,9 @@
+# Production deploys are done by .github/workflows/deploy.yml after the
+# checks pass, so Netlify skips its own production build (the ignore command
+# exiting 0 means "skip"). Deploy previews for PRs still build here.
+[build]
+  ignore = 'test "$CONTEXT" = "production"'
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
