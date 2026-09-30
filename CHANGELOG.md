@@ -7,9 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 30 Sep 2026
+
 ### Changed
 
 - The production deploy workflow (`Deploy to Netlify`, `.github/workflows/deploy.yml`) is now manual-only: it no longer runs on every push to `master` and is started by hand from the Actions tab (`workflow_dispatch`), as in trip-trace-api. ([#28](https://github.com/joaquin-p-olivera/finview-frontend/pull/28))
+- Bumped `react` and `react-dom` from 18.3.1 to 19.3.0 (Dependabot had only bumped `react`, so `npm ci` failed with a peer-dependency conflict until `react-dom` was bumped in the same PR). ([#21](https://github.com/joaquin-p-olivera/finview-frontend/pull/21))
+- Bumped `react-router-dom` from 6.30.3 to 7.18.4. ([#22](https://github.com/joaquin-p-olivera/finview-frontend/pull/22))
+- Bumped `zod` from 3.25.76 to 4.6.5. ([#23](https://github.com/joaquin-p-olivera/finview-frontend/pull/23))
+- Bumped `vite` from 6.4.1 to 8.3.1, together with `@vitejs/plugin-react` from 4.7.0 to 6.1.1 (plugin-react 4 doesn't support vite 8). ([#19](https://github.com/joaquin-p-olivera/finview-frontend/pull/19))
+- Upgraded Tailwind CSS from 3.4.19 to 4.3.3 with the official upgrade tool: PostCSS now uses `@tailwindcss/postcss` (`autoprefixer` removed), `src/styles.css` imports `tailwindcss` and keeps v3's default border color, `tailwind.config.js` was removed, and renamed utilities were updated (`shadow-sm` → `shadow-xs`, `outline-none` → `outline-hidden`, `rounded` → `rounded-sm`). ([#25](https://github.com/joaquin-p-olivera/finview-frontend/pull/25))
 
 ## [1.0.0] - 30 Sep 2026
 
