@@ -75,7 +75,7 @@ function CategoriesPage() {
           </Link>
           <Link
             to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-400"
+            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
           >
             Subir estado
           </Link>
@@ -104,7 +104,7 @@ function CategoriesPage() {
               placeholder="Nombre de la categoría"
               value={newCategory.name}
               onChange={(e) => setNewCategory((prev) => ({ ...prev, name: e.target.value }))}
-              className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+              className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             />
             <div className="flex gap-2">
               {colors.map((c) => (

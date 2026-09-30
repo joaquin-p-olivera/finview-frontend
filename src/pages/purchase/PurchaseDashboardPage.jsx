@@ -158,7 +158,7 @@ function PurchaseDashboardPage() {
                 value={newCartName}
                 onChange={(e) => setNewCartName(e.target.value)}
                 required
-                className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
               />
               <button
                 type="submit"

@@ -47,7 +47,7 @@ function LoginPage() {
             <label className="block text-sm font-medium text-slate-200">Email</label>
             <input
               type="email"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-50 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-50 placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
               placeholder="tu@email.com"
               {...register("email")}
             />
@@ -59,7 +59,7 @@ function LoginPage() {
             <label className="block text-sm font-medium text-slate-200">Contraseña</label>
             <input
               type="password"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-50 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-50 placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/40"
               placeholder="********"
               {...register("password")}
             />
@@ -70,7 +70,7 @@ function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-400 disabled:opacity-60"
+            className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-indigo-400 disabled:opacity-60"
           >
             {isSubmitting ? "Ingresando..." : "Ingresar"}
           </button>
