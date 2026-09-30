@@ -1,0 +1,95 @@
+name: Deploy to Netlify
+
+# Every push to master runs the checks and, if they pass, builds that exact
+# commit and publishes it to Netlify. Netlify's own builds should be stopped
+# for this site so it doesn't deploy twice (or deploy a commit whose checks
+# failed).
+#
+# It can also be run by hand to deploy any branch at its current commit,
+# which lets a branch be tried in production before merging.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'master'
+      confirm_non_master:
+        description: 'Type "yes" to confirm — only required when branch is not master'
+        required: false
+        default: ''
+
+# Deploys queue up instead of cancelling each other, so the last push wins
+# without leaving a deploy half done.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Deploying master needs no extra step (the common case); deploying
+  # anything else needs a deliberate "yes", so a typo in the branch field
+  # fails closed instead of deploying the wrong thing.
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Guard against accidental non-master deploys
+        if: github.event_name == 'workflow_dispatch' && inputs.branch != 'master' && inputs.confirm_non_master != 'yes'
+        run: |
+          echo "::error::Deploying a branch other than master requires confirm_non_master set to 'yes'."
+          exit 1
+
+  checks:
+    needs: guard
+    uses: ./.github/workflows/checks.yml
+    with:
+      ref: ${{ inputs.branch || github.sha }}
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.branch || github.sha }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check deploy configuration
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          missing=0
+          [ -n "$VITE_API_BASE_URL" ] || { echo "::error::The VITE_API_BASE_URL repository variable is not set."; missing=1; }
+          [ -n "$NETLIFY_AUTH_TOKEN" ] || { echo "::error::The NETLIFY_AUTH_TOKEN secret is not set."; missing=1; }
+          [ -n "$NETLIFY_SITE_ID" ] || { echo "::error::The NETLIFY_SITE_ID secret is not set."; missing=1; }
+          exit $missing
+
+      - name: Build
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+        run: npm run build
+
+      # Publishes the prebuilt dist/ as the production deploy; redirects come
+      # from netlify.toml.
+      - name: Publish to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npx --yes netlify-cli@27 deploy --prod --no-build --dir=dist \
+            --message "GitHub Actions: $(git rev-parse --short HEAD)"
