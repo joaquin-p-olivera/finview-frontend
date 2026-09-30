@@ -78,7 +78,7 @@ function OnboardingPage() {
           type="button"
           onClick={onSave}
           disabled={isSaving}
-          className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-400 disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-indigo-400 disabled:opacity-60"
         >
           {isSaving ? "Guardando..." : "Guardar y continuar"}
         </button>

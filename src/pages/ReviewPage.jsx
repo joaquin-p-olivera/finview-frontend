@@ -124,7 +124,7 @@ function ReviewPage() {
               type="button"
               onClick={handleConfirm}
               disabled={saving || rows.length === 0}
-              className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-emerald-400 disabled:opacity-60"
+              className="rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white shadow-xs hover:bg-emerald-400 disabled:opacity-60"
             >
               {saving ? "Guardando..." : "Confirmar y guardar"}
             </button>
@@ -133,7 +133,7 @@ function ReviewPage() {
 
         {error && <p className="text-xs text-red-400">{error}</p>}
 
-        <div className="grid gap-4 md:grid-cols-[minmax(0,2fr),minmax(0,1.4fr)] md:items-stretch">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] md:items-stretch">
           <div className="h-[70vh]">
             <ReviewTable
               rows={rows}

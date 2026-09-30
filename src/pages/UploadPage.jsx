@@ -93,7 +93,7 @@ function UploadPage() {
               type="button"
               onClick={handleUpload}
               disabled={isUploading || !file}
-              className="mt-2 inline-flex items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-400 disabled:opacity-60"
+              className="mt-2 inline-flex items-center justify-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-indigo-400 disabled:opacity-60"
             >
               {isUploading ? "Parseando con IA..." : "Parsear con IA"}
             </button>
