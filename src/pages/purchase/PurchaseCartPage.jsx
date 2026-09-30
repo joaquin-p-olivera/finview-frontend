@@ -8,6 +8,8 @@ import {
   completeCart,
   listPurchaseCategories,
 } from "../../api/purchase";
+import { getErrorMessage } from "../../api/client";
+import LoadingScreen from "../../components/common/LoadingScreen";
 
 function PurchaseCartPage() {
   const { id } = useParams();
@@ -19,7 +21,7 @@ function PurchaseCartPage() {
   const [adding, setAdding] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = async ({ initial = false } = {}) => {
     try {
       const [cartData, catsData] = await Promise.all([
         getPurchaseCart(id),
@@ -29,14 +31,16 @@ function PurchaseCartPage() {
       setCategories(catsData);
     } catch (err) {
       console.error(err);
-      navigate("/purchase");
+      // Only leave the page if the cart can't be opened at all; a failed
+      // refresh after adding or editing an item keeps the user where they are.
+      if (initial) navigate("/purchase");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData({ initial: true });
   }, [id]);
 
   const handleAddItem = async (e) => {
@@ -54,7 +58,7 @@ function PurchaseCartPage() {
       setNewItem({ product_name: "", price: "", quantity: 1, category_id: "" });
       fetchData();
     } catch (err) {
-      alert("Error al agregar item");
+      alert(getErrorMessage(err, "Error al agregar item"));
     } finally {
       setAdding(false);
     }
@@ -66,7 +70,7 @@ function PurchaseCartPage() {
       setEditingItem(null);
       fetchData();
     } catch (err) {
-      alert("Error al actualizar item");
+      alert(getErrorMessage(err, "Error al actualizar item"));
     }
   };
 
@@ -76,7 +80,7 @@ function PurchaseCartPage() {
       await deleteCartItem(id, itemId);
       fetchData();
     } catch (err) {
-      alert("Error al eliminar item");
+      alert(getErrorMessage(err, "Error al eliminar item"));
     }
   };
 
@@ -86,7 +90,7 @@ function PurchaseCartPage() {
       await completeCart(id);
       navigate("/purchase");
     } catch (err) {
-      alert(err.response?.data?.detail || "Error al completar carrito");
+      alert(getErrorMessage(err, "Error al completar carrito"));
     }
   };
 
@@ -99,11 +103,7 @@ function PurchaseCartPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
-        <p className="text-slate-400">Cargando...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!cart) {
