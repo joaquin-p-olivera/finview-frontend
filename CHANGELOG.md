@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The app wakes the API up as soon as it loads, and slow logins and full-screen loaders now say the server is waking up instead of showing a bare "Cargando...". ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
+
+### Fixed
+
+- API requests now time out instead of hanging, safe requests (GETs, and 502/503 from Render's proxy) are retried automatically, cart errors explain when the server didn't respond, and a failed refresh after adding a cart item no longer leaves the cart page. ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
+
 ## [1.1.0] - 30 Sep 2026
 
 ### Changed
