@@ -213,12 +213,17 @@ function PurchaseDashboardPage() {
             ) : (
               <ul className="space-y-3">
                 {carts.filter(c => !c.is_active).slice(0, 5).map((cart) => (
-                  <li key={cart.id} className="flex items-center justify-between rounded-lg bg-slate-800/50 p-3">
-                    <div>
-                      <p className="font-medium">{cart.store_name || "Sin nombre"}</p>
-                      <p className="text-xs text-slate-400">{formatDate(cart.completed_at || cart.created_at)}</p>
-                    </div>
-                    <p className="font-semibold text-emerald-400">{formatCurrency(cart.total)}</p>
+                  <li key={cart.id}>
+                    <Link
+                      to={`/purchase/cart/${cart.id}`}
+                      className="flex items-center justify-between rounded-lg bg-slate-800/50 p-3 hover:bg-slate-800"
+                    >
+                      <div>
+                        <p className="font-medium">{cart.store_name || "Sin nombre"}</p>
+                        <p className="text-xs text-slate-400">{formatDate(cart.completed_at || cart.created_at)}</p>
+                      </div>
+                      <p className="font-semibold text-emerald-400">{formatCurrency(cart.total)}</p>
+                    </Link>
                   </li>
                 ))}
               </ul>

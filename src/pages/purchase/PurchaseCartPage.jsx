@@ -124,16 +124,23 @@ function PurchaseCartPage() {
             <p className="text-xs text-slate-400">{cart.items?.length || 0} productos</p>
           </div>
         </div>
-        <button
-          onClick={handleComplete}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
-        >
-          Finalizar Compra
-        </button>
+        {cart.is_active ? (
+          <button
+            onClick={handleComplete}
+            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+          >
+            Finalizar Compra
+          </button>
+        ) : (
+          <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-400">
+            Completado
+          </span>
+        )}
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-8">
         {/* Add Item Form */}
+        {cart.is_active && (
         <form onSubmit={handleAddItem} className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
           <h2 className="mb-4 text-lg font-semibold">Agregar Producto</h2>
           <div className="grid gap-4 sm:grid-cols-5">
@@ -188,6 +195,7 @@ function PurchaseCartPage() {
             </div>
           )}
         </form>
+        )}
 
         {/* Items List */}
         <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
@@ -256,18 +264,22 @@ function PurchaseCartPage() {
                       </div>
                       <div className="flex items-center gap-4">
                         <p className="font-semibold">{formatCurrency(item.price * item.quantity)}</p>
-                        <button
-                          onClick={() => setEditingItem(item.id)}
-                          className="text-sm text-slate-400 hover:text-white"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDeleteItem(item.id)}
-                          className="text-sm text-red-400 hover:text-red-300"
-                        >
-                          Eliminar
-                        </button>
+                        {cart.is_active && (
+                          <>
+                            <button
+                              onClick={() => setEditingItem(item.id)}
+                              className="text-sm text-slate-400 hover:text-white"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={() => handleDeleteItem(item.id)}
+                              className="text-sm text-red-400 hover:text-red-300"
+                            >
+                              Eliminar
+                            </button>
+                          </>
+                        )}
                       </div>
                     </>
                   )}
