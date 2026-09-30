@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] - 30 Sep 2026
+
 ### Added
 
 - CI: every PR to `develop` or `master` now runs `Frontend Checks / check` (`.github/workflows/checks.yml`) — `npm ci` plus `vite build` on Node 22, so a broken build or an out-of-sync lockfile fails the PR instead of the deploy. Also runnable by hand, and reused by the deploy workflow. ([#18](https://github.com/joaquin-p-olivera/finview-frontend/pull/18))
