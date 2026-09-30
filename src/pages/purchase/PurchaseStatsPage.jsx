@@ -16,16 +16,20 @@ const COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#f43f5e", "#f97316", "#eab308"
 function PurchaseStatsPage() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [days, setDays] = useState(30);
 
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
+      setError(null);
       try {
         const data = await getPurchaseStats(days);
         setStats(data);
       } catch (err) {
         console.error(err);
+        setStats(null);
+        setError("No se pudieron cargar las estadísticas. Probá de nuevo más tarde.");
       } finally {
         setLoading(false);
       }
@@ -67,6 +71,8 @@ function PurchaseStatsPage() {
 
         {loading ? (
           <p className="text-center text-slate-400">Cargando...</p>
+        ) : error ? (
+          <p className="rounded-xl border border-rose-900 bg-rose-950/40 p-6 text-center text-rose-300">{error}</p>
         ) : (
           <>
             {/* Summary Cards */}
