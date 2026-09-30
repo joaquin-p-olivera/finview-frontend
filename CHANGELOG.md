@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.1] - 30 Sep 2026
+
 ### Fixed
 
 - The purchase stats page now shows an error message when the stats fail to load, instead of silently rendering zeros. ([#31](https://github.com/joaquin-p-olivera/finview-frontend/pull/31))
