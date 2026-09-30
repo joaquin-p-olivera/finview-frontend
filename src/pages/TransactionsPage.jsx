@@ -98,7 +98,7 @@ function TransactionsPage() {
           </Link>
           <Link
             to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-sm hover:bg-indigo-400"
+            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
           >
             Subir estado
           </Link>
@@ -123,19 +123,19 @@ function TransactionsPage() {
             placeholder="Buscar descripción..."
             value={filters.search}
             onChange={(e) => handleFilterChange("search", e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
           />
           <input
             type="date"
             value={filters.startDate}
             onChange={(e) => handleFilterChange("startDate", e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white focus:border-indigo-500 focus:outline-hidden"
           />
           <input
             type="date"
             value={filters.endDate}
             onChange={(e) => handleFilterChange("endDate", e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white focus:border-indigo-500 focus:outline-hidden"
           />
         </div>
 

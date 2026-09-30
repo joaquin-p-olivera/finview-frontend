@@ -145,7 +145,7 @@ function PurchaseListDetailPage() {
             placeholder="Producto"
             value={newItem.product_name}
             onChange={(e) => setNewItem((p) => ({ ...p, product_name: e.target.value }))}
-            className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             required
           />
           <input
@@ -154,7 +154,7 @@ function PurchaseListDetailPage() {
             min="1"
             value={newItem.quantity}
             onChange={(e) => setNewItem((p) => ({ ...p, quantity: e.target.value }))}
-            className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
           />
           <button
             type="submit"
@@ -184,7 +184,7 @@ function PurchaseListDetailPage() {
                     type="checkbox"
                     checked={item.is_checked}
                     onChange={() => handleOpenModal(item)}
-                    className="h-5 w-5 rounded border-slate-600 bg-slate-900 text-indigo-500"
+                    className="h-5 w-5 rounded-sm border-slate-600 bg-slate-900 text-indigo-500"
                   />
                   <span className={item.is_checked ? "line-through" : ""}>
                     {item.product_name}

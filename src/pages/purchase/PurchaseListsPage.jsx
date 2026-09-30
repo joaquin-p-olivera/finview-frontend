@@ -100,7 +100,7 @@ function PurchaseListsPage() {
             placeholder="Nombre de la lista"
             value={newListName}
             onChange={(e) => setNewListName(e.target.value)}
-            className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             required
           />
           <button

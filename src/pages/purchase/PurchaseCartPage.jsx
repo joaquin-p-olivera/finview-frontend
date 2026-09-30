@@ -149,7 +149,7 @@ function PurchaseCartPage() {
               placeholder="Producto"
               value={newItem.product_name}
               onChange={(e) => setNewItem((p) => ({ ...p, product_name: e.target.value }))}
-              className="sm:col-span-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+              className="sm:col-span-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
               required
             />
             <input
@@ -158,7 +158,7 @@ function PurchaseCartPage() {
               step="0.01"
               value={newItem.price}
               onChange={(e) => setNewItem((p) => ({ ...p, price: e.target.value }))}
-              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
               required
             />
             <input
@@ -167,7 +167,7 @@ function PurchaseCartPage() {
               min="1"
               value={newItem.quantity}
               onChange={(e) => setNewItem((p) => ({ ...p, quantity: e.target.value }))}
-              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             />
             <button
               type="submit"
