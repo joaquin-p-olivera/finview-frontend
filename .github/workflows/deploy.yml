@@ -1,15 +1,13 @@
 name: Deploy to Netlify
 
-# Every push to master runs the checks and, if they pass, builds that exact
-# commit and publishes it to Netlify. Netlify skips its own production build
-# (see netlify.toml) so it doesn't deploy twice or deploy a commit whose checks
-# failed. Deploy previews for PRs are still built by Netlify.
-#
-# It can also be run by hand to deploy any branch at its current commit,
-# which lets a branch be tried in production before merging.
+# Manual only: run it by hand (Actions -> Deploy to Netlify -> Run workflow)
+# to deploy a branch at its current commit, usually master after a release.
+# It runs the checks and, if they pass, builds that exact commit and publishes
+# it to Netlify. Netlify skips its own production build (see netlify.toml), so
+# merges don't deploy on their own. Deploy previews for PRs are still built by
+# Netlify. Any branch can be deployed, which lets a branch be tried in
+# production before merging.
 on:
-  push:
-    branches: [master]
   workflow_dispatch:
     inputs:
       branch:
@@ -21,7 +19,7 @@ on:
         required: false
         default: ''
 
-# Deploys queue up instead of cancelling each other, so the last push wins
+# Deploys queue up instead of cancelling each other, so the last run wins
 # without leaving a deploy half done.
 concurrency:
   group: deploy-production
@@ -38,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Guard against accidental non-master deploys
-        if: github.event_name == 'workflow_dispatch' && inputs.branch != 'master' && inputs.confirm_non_master != 'yes'
+        if: inputs.branch != 'master' && inputs.confirm_non_master != 'yes'
         run: |
           echo "::error::Deploying a branch other than master requires confirm_non_master set to 'yes'."
           exit 1
@@ -47,7 +45,7 @@ jobs:
     needs: guard
     uses: ./.github/workflows/checks.yml
     with:
-      ref: ${{ inputs.branch || github.sha }}
+      ref: ${{ inputs.branch }}
 
   deploy:
     needs: checks
@@ -56,7 +54,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          ref: ${{ inputs.branch || github.sha }}
+          ref: ${{ inputs.branch }}
 
       - name: Set up Node
         uses: actions/setup-node@v7
