@@ -1,9 +1,9 @@
 name: Deploy to Netlify
 
 # Every push to master runs the checks and, if they pass, builds that exact
-# commit and publishes it to Netlify. Netlify's own builds should be stopped
-# for this site so it doesn't deploy twice (or deploy a commit whose checks
-# failed).
+# commit and publishes it to Netlify. Netlify skips its own production build
+# (see netlify.toml) so it doesn't deploy twice or deploy a commit whose checks
+# failed. Deploy previews for PRs are still built by Netlify.
 #
 # It can also be run by hand to deploy any branch at its current commit,
 # which lets a branch be tried in production before merging.
