@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] - 30 Sep 2026
+
+### Added
+
+- The app wakes the API up as soon as it loads, and slow logins and full-screen loaders now say the server is waking up instead of showing a bare "Cargando...". ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
+
+### Fixed
+
+- API requests now time out instead of hanging and are retried automatically when they get no response or a gateway error; writes send an `Idempotency-Key` so a retried one (e.g. adding a product to a cart) isn't applied twice. Errors explain when the server didn't respond, a failed refresh after adding a cart item no longer leaves the cart page, and a failed `/auth/me` on app load no longer logs the user out unless the token is actually invalid (401). ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
+
 ## [1.1.1] - 30 Sep 2026
 
 ### Fixed
