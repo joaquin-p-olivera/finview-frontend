@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- The hint shown when a load or login takes longer than 5 seconds now reads "Está tardando más de lo normal..." instead of saying the server is waking up, since slow mobile connections cause it too. ([#38](https://github.com/joaquin-p-olivera/finview-frontend/pull/38))
+
 ## [1.2.0] - 30 Sep 2026
 
 ### Added
