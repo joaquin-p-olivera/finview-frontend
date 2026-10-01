@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] - 30 Sep 2026
+
 ### Added
 
 - The app wakes the API up as soon as it loads, and slow logins and full-screen loaders now say the server is waking up instead of showing a bare "Cargando...". ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
