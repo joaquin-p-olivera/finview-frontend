@@ -24,6 +24,7 @@ import {
   getTopMerchants,
   getTrends,
 } from "../api/stats";
+import LoadingScreen from "../components/common/LoadingScreen";
 
 const COLORS = [
   "#6366f1",
@@ -127,11 +128,7 @@ function DashboardPage() {
       : null;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
-        <p className="text-slate-400">Cargando...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

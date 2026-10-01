@@ -6,7 +6,9 @@ export const loginRequest = async ({ email, password }) => {
   form.append("password", password);
 
   const { data } = await api.post("/auth/login", form, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" }
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    // The login is usually the first request after the API went to sleep.
+    timeout: 90000
   });
   return data;
 };

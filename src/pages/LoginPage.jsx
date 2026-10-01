@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { loginRequest, fetchMe } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import { useSlowHint, SLOW_HINT_TEXT } from "../components/common/LoadingScreen";
 
 const schema = z.object({
   email: z.string().email("Email inválido"),
@@ -21,6 +22,7 @@ function LoginPage() {
   } = useForm({
     resolver: zodResolver(schema)
   });
+  const slow = useSlowHint(isSubmitting);
 
   const onSubmit = async (values) => {
     try {
@@ -74,6 +76,9 @@ function LoginPage() {
           >
             {isSubmitting ? "Ingresando..." : "Ingresar"}
           </button>
+          {slow && (
+            <p className="text-center text-xs text-slate-400">{SLOW_HINT_TEXT}</p>
+          )}
         </form>
         <p className="mt-4 text-center text-xs text-slate-400">
           ¿No tenés cuenta?{" "}

@@ -8,6 +8,8 @@ import {
   getActiveCart,
   addListItemToCart,
 } from "../../api/purchase";
+import LoadingScreen from "../../components/common/LoadingScreen";
+import { getErrorMessage } from "../../api/client";
 
 function PurchaseListDetailPage() {
   const { id } = useParams();
@@ -54,7 +56,7 @@ function PurchaseListDetailPage() {
       setNewItem({ product_name: "", quantity: "" });
       fetchData();
     } catch (err) {
-      alert("Error al agregar item");
+      alert(getErrorMessage(err, "Error al agregar item"));
     } finally {
       setAdding(false);
     }
@@ -90,7 +92,7 @@ function PurchaseListDetailPage() {
       setModalItem(null);
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.detail || "Error al agregar al carrito");
+      alert(getErrorMessage(err, "Error al agregar al carrito"));
     } finally {
       setAddingToCart(false);
     }
@@ -109,11 +111,7 @@ function PurchaseListDetailPage() {
   const totalCount = list?.items?.length || 0;
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
-        <p className="text-slate-400">Cargando...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!list) {
