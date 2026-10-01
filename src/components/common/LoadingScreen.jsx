@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-// After this long, a load is most likely waiting for the API to wake up from
-// Render's free-tier sleep, so tell the user instead of showing a bare spinner.
+// After this long, a load is most likely stuck on a slow connection or a Render
+// cold start, so tell the user instead of showing a bare spinner.
 const SLOW_AFTER_MS = 5000;
 
 export const useSlowHint = (active) => {
@@ -19,7 +19,7 @@ export const useSlowHint = (active) => {
   return slow;
 };
 
-export const SLOW_HINT_TEXT = "El servidor se está despertando, puede tardar hasta un minuto...";
+export const SLOW_HINT_TEXT = "Está tardando más de lo normal...";
 
 function LoadingScreen({ text = "Cargando..." }) {
   const slow = useSlowHint(true);
