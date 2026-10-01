@@ -26,8 +26,12 @@ function App() {
     if (isAuthenticated && !user) {
       fetchMe()
         .then(setUser)
-        .catch(() => {
-          useAuthStore.getState().logout();
+        .catch((err) => {
+          // Only an invalid or expired token ends the session; a network
+          // hiccup or a slow cold start shouldn't send the user to the login.
+          if (err.response?.status === 401) {
+            useAuthStore.getState().logout();
+          }
         });
     }
   }, [isAuthenticated, user, setUser]);

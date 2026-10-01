@@ -13,7 +13,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- API requests now time out instead of hanging, safe requests (GETs, and 502/503 from Render's proxy) are retried automatically, cart errors explain when the server didn't respond, and a failed refresh after adding a cart item no longer leaves the cart page. ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
+- API requests now time out instead of hanging and are retried automatically when they get no response or a gateway error; writes send an `Idempotency-Key` so a retried one (e.g. adding a product to a cart) isn't applied twice. Errors explain when the server didn't respond, a failed refresh after adding a cart item no longer leaves the cart page, and a failed `/auth/me` on app load no longer logs the user out unless the token is actually invalid (401). ([#35](https://github.com/joaquin-p-olivera/finview-frontend/pull/35))
 
 ## [1.1.1] - 30 Sep 2026
 
