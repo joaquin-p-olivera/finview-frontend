@@ -14,7 +14,7 @@ const REQUEST_TIMEOUT_MS = 60000;
 // Writes give up sooner and are retried: on mobile data a request sometimes
 // sits on a dead connection and never reaches the API, and a fresh attempt
 // usually goes through right away.
-const WRITE_TIMEOUT_MS = 8000;
+const WRITE_TIMEOUT_MS = 5000;
 const MAX_RETRIES = 2;
 const WRITE_METHODS = ["post", "put", "patch", "delete"];
 
