@@ -249,26 +249,29 @@ function PurchaseCartPage() {
               {cart.items?.map((item) => (
                 <li key={item.id} className="flex items-center justify-between p-4">
                   {editingItem === item.id ? (
-                    <div className="flex flex-1 items-center gap-2">
+                    <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 sm:flex sm:items-center">
                       <input
                         type="text"
+                        aria-label="Producto"
                         defaultValue={item.product_name}
                         id={`edit-name-${item.id}`}
-                        className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm"
+                        className="col-span-2 min-w-0 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm sm:flex-1 sm:py-1"
                       />
                       <input
                         type="number"
                         defaultValue={item.price}
                         step="0.01"
+                        aria-label="Precio"
                         id={`edit-price-${item.id}`}
-                        className="w-24 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm"
+                        className="min-w-0 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm sm:w-24 sm:py-1"
                       />
                       <input
                         type="number"
                         defaultValue={item.quantity}
                         min="1"
+                        aria-label="Cantidad"
                         id={`edit-qty-${item.id}`}
-                        className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm"
+                        className="min-w-0 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm sm:w-16 sm:py-1"
                       />
                       <button
                         onClick={() => handleUpdateItem(item, {
@@ -276,13 +279,13 @@ function PurchaseCartPage() {
                           price: parseFloat(document.getElementById(`edit-price-${item.id}`).value),
                           quantity: parseInt(document.getElementById(`edit-qty-${item.id}`).value),
                         })}
-                        className="rounded-lg bg-emerald-600 px-3 py-1 text-xs"
+                        className="rounded-lg bg-emerald-600 px-3 py-2 text-sm sm:py-1 sm:text-xs"
                       >
                         Guardar
                       </button>
                       <button
                         onClick={() => setEditingItem(null)}
-                        className="rounded-lg bg-slate-700 px-3 py-1 text-xs"
+                        className="rounded-lg bg-slate-700 px-3 py-2 text-sm sm:py-1 sm:text-xs"
                       >
                         Cancelar
                       </button>
