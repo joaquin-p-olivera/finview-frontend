@@ -15,7 +15,6 @@ import {
   Line,
   Legend,
 } from "recharts";
-import { useAuthStore } from "../store/authStore";
 import {
   getSummary,
   getByMonth,
@@ -25,6 +24,7 @@ import {
   getTrends,
 } from "../api/stats";
 import LoadingScreen from "../components/common/LoadingScreen";
+import AppHeader from "../components/common/AppHeader";
 
 const COLORS = [
   "#6366f1",
@@ -40,8 +40,6 @@ const COLORS = [
 ];
 
 function DashboardPage() {
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
   const [summary, setSummary] = useState(null);
   const [byMonth, setByMonth] = useState([]);
   const [byCategory, setByCategory] = useState([]);
@@ -138,44 +136,16 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <div className="flex items-center gap-3 text-sm">
-          <Link
-            to="/transactions"
-            className="text-slate-400 hover:text-white"
-          >
-            Transacciones
-          </Link>
-          <Link
-            to="/reports"
-            className="text-slate-400 hover:text-white"
-          >
-            Reportes
-          </Link>
-          <Link
-            to="/purchase"
-            className="text-slate-400 hover:text-white"
-          >
-            Compras
-          </Link>
-          <Link
-            to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
-          >
-            Subir estado
-          </Link>
-          <span className="text-slate-400">
-            {user ? `${user.username}` : "Sesión iniciada"}
-          </span>
-          <button
-            onClick={logout}
-            className="rounded-md border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/transactions", label: "Transacciones" },
+          { to: "/reports", label: "Reportes" },
+          { to: "/purchase", label: "Compras" },
+        ]}
+        showUpload
+        showUser
+        showLogout
+      />
 
       <main className="px-6 py-8">
         <div className="mb-6 flex items-center justify-between">

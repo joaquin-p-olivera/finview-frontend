@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { listStatements } from "../api/statements";
 import { getStatementReport } from "../api/stats";
+import AppHeader from "../components/common/AppHeader";
 import LoadingScreen from "../components/common/LoadingScreen";
 
 const COLORS = [
@@ -170,12 +171,13 @@ function ReportsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <Link to="/dashboard" className="text-sm text-slate-400 hover:text-white">
-          Dashboard
-        </Link>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/transactions", label: "Transacciones" },
+        ]}
+        showUpload
+      />
 
       <main className="px-6 py-8">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
