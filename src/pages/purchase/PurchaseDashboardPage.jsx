@@ -7,6 +7,7 @@ import {
   createPurchaseCart,
   listPurchaseLists,
   listPurchaseCategories,
+  listPurchaseStores,
 } from "../../api/purchase";
 import LoadingScreen from "../../components/common/LoadingScreen";
 import SyncBanner from "../../components/common/SyncBanner";
@@ -20,6 +21,8 @@ import {
   writeCache,
 } from "../../offline/purchaseOffline";
 
+const NEW_STORE = "__new__";
+
 function PurchaseDashboardPage() {
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
@@ -32,6 +35,9 @@ function PurchaseDashboardPage() {
   const [categories, setCategories] = useState(cached?.categories ?? []);
   const [loading, setLoading] = useState(!cached);
   const [stale, setStale] = useState(false);
+  const [stores, setStores] = useState(cached?.stores ?? []);
+  // Selected store id, or NEW_STORE to type a name that's added to the list.
+  const [selectedStore, setSelectedStore] = useState("");
   const [newCartName, setNewCartName] = useState("");
   const [creatingCart, setCreatingCart] = useState(false);
   const { ops } = useOutbox();
@@ -43,17 +49,25 @@ function PurchaseDashboardPage() {
 
   const fetchData = async () => {
     try {
-      const [active, cartsData, listsData, catsData] = await Promise.all([
+      const [active, cartsData, listsData, catsData, storesData] = await Promise.all([
         getActiveCart(),
         listPurchaseCarts(10),
         listPurchaseLists(),
         listPurchaseCategories(),
+        listPurchaseStores(),
       ]);
       setActiveCart(active);
       setCarts(cartsData);
       setLists(listsData);
       setCategories(catsData);
-      writeCache(cacheKeys.dashboard, { activeCart: active, carts: cartsData, lists: listsData, categories: catsData });
+      setStores(storesData);
+      writeCache(cacheKeys.dashboard, {
+        activeCart: active,
+        carts: cartsData,
+        lists: listsData,
+        categories: catsData,
+        stores: storesData,
+      });
       writeCache(cacheKeys.activeCart, active);
       writeCache(cacheKeys.categories, catsData);
       setStale(false);
@@ -70,13 +84,20 @@ function PurchaseDashboardPage() {
     return onOutboxSynced(() => fetchData());
   }, []);
 
+  // Without stores yet there's nothing to pick: go straight to typing a name.
+  const addingNewStore = stores.length === 0 || selectedStore === NEW_STORE;
+  const canCreateCart = addingNewStore ? !!newCartName.trim() : !!selectedStore;
+
   const handleCreateCart = async (e) => {
     e.preventDefault();
-    if (!newCartName.trim()) return;
+    if (!canCreateCart) return;
     setCreatingCart(true);
     try {
-      const newCart = await createPurchaseCart({ store_name: newCartName.trim() });
+      const newCart = await createPurchaseCart(
+        addingNewStore ? { store_name: newCartName.trim() } : { store_id: selectedStore }
+      );
       setActiveCart(newCart);
+      setSelectedStore("");
       setNewCartName("");
       fetchData();
     } catch (err) {
@@ -119,6 +140,12 @@ function PurchaseDashboardPage() {
             className="text-slate-400 hover:text-white"
           >
             Listas
+          </Link>
+          <Link
+            to="/purchase/stores"
+            className="text-slate-400 hover:text-white"
+          >
+            Supermercados
           </Link>
           <Link
             to="/purchase/stats"
@@ -176,18 +203,38 @@ function PurchaseDashboardPage() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleCreateCart} className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Nombre del supermercado"
-                value={newCartName}
-                onChange={(e) => setNewCartName(e.target.value)}
-                required
-                className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
-              />
+            <form onSubmit={handleCreateCart} className="flex flex-wrap gap-3">
+              {stores.length > 0 && (
+                <select
+                  value={selectedStore}
+                  onChange={(e) => setSelectedStore(e.target.value)}
+                  className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white focus:border-indigo-500 focus:outline-hidden"
+                >
+                  <option value="" disabled>
+                    Elegí el supermercado
+                  </option>
+                  {stores.map((store) => (
+                    <option key={store.id} value={store.id}>
+                      {store.name}
+                    </option>
+                  ))}
+                  <option value={NEW_STORE}>+ Agregar nuevo…</option>
+                </select>
+              )}
+              {addingNewStore && (
+                <input
+                  type="text"
+                  placeholder="Nombre del supermercado nuevo"
+                  value={newCartName}
+                  onChange={(e) => setNewCartName(e.target.value)}
+                  autoFocus={stores.length > 0}
+                  required
+                  className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
+                />
+              )}
               <button
                 type="submit"
-                disabled={creatingCart || !newCartName.trim()}
+                disabled={creatingCart || !canCreateCart}
                 className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
               >
                 {creatingCart ? "Creando..." : "Iniciar Carrito"}
