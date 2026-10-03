@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- MIT license (`LICENSE`). ([#51](https://github.com/joaquin-p-olivera/finview-frontend/pull/51))
+
 ## [1.5.0] - 3 Oct 2026
 
 ### Added
