@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 import { listCategories, createCategory, deleteCategory } from "../api/categories";
+import AppHeader from "../components/common/AppHeader";
 
 function CategoriesPage() {
-  const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,29 +63,14 @@ function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <div className="flex items-center gap-3 text-sm">
-          <Link to="/dashboard" className="text-slate-400 hover:text-white">
-            Dashboard
-          </Link>
-          <Link to="/purchase" className="text-slate-400 hover:text-white">
-            Compras
-          </Link>
-          <Link
-            to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
-          >
-            Subir estado
-          </Link>
-          <button
-            onClick={logout}
-            className="rounded-md border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/purchase", label: "Compras" },
+        ]}
+        showUpload
+        showLogout
+      />
 
       <main className="mx-auto max-w-3xl px-6 py-8">
         <div className="mb-8">
