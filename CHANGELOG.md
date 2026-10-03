@@ -9,11 +9,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Reportes page (`/reports`, linked from the dashboard header): pick a confirmed statement and see, for UYU and USD separately, the statement total, a category pie and a table with each category's amount and share plus the other charges (insurance, interest, fees), the same numbers as the monthly Itaú report email. Needs the backend's statement report ([finview-backend#41](https://github.com/joaquin-p-olivera/finview-backend/pull/41)). ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- Reportes page (`/reports`, linked from the dashboard header): pick a confirmed statement and see, for UYU and USD separately, the statement total, a category pie and a table with each category's amount and share plus the other charges (insurance, interest, fees), the same numbers as the monthly Itaú report email. Needs the backend's statement report ([finview-backend#41](https://github.com/joaquin-p-olivera/finview-backend/pull/41)). ([#47](https://github.com/joaquin-p-olivera/finview-frontend/pull/47))
 
 ### Fixed
 
-- The dashboard no longer adds dollars to pesos: a UYU / USD toggle switches every chart and total to one currency, and amounts are formatted in that currency. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- The dashboard no longer adds dollars to pesos: a UYU / USD toggle switches every chart and total to one currency, and amounts are formatted in that currency. ([#47](https://github.com/joaquin-p-olivera/finview-frontend/pull/47))
 
 ## [1.4.0] - 3 Oct 2026
 
