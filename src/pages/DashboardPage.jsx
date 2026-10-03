@@ -52,14 +52,16 @@ function DashboardPage() {
   const [merchantPeriod, setMerchantPeriod] = useState("latest");
   const [trends, setTrends] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Pesos and dollars are never summed together: every chart shows one currency
+  const [currency, setCurrency] = useState("UYU");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [sum, month, trend] = await Promise.all([
-          getSummary(),
-          getByMonth(6),
-          getTrends(30),
+          getSummary(currency),
+          getByMonth(6, currency),
+          getTrends(30, currency),
         ]);
         setSummary(sum);
         setByMonth(month.reverse());
@@ -71,51 +73,54 @@ function DashboardPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [currency]);
 
   useEffect(() => {
     const fetchCategoryData = async () => {
       try {
-        const cat = await getByCategory(categoryPeriod);
+        const cat = await getByCategory(categoryPeriod, currency);
         setByCategory(cat);
       } catch (err) {
         console.error(err);
       }
     };
     fetchCategoryData();
-  }, [categoryPeriod]);
+  }, [categoryPeriod, currency]);
 
   useEffect(() => {
     const fetchBankData = async () => {
       try {
-        const bank = await getByBank(bankPeriod);
+        const bank = await getByBank(bankPeriod, currency);
         setByBank(bank);
       } catch (err) {
         console.error(err);
       }
     };
     fetchBankData();
-  }, [bankPeriod]);
+  }, [bankPeriod, currency]);
 
   useEffect(() => {
     const fetchMerchantData = async () => {
       try {
-        const merch = await getTopMerchants(5, merchantPeriod);
+        const merch = await getTopMerchants(5, merchantPeriod, currency);
         setTopMerchants(merch);
       } catch (err) {
         console.error(err);
       }
     };
     fetchMerchantData();
-  }, [merchantPeriod]);
+  }, [merchantPeriod, currency]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("es-UY", {
       style: "currency",
-      currency: "UYU",
+      currency,
       minimumFractionDigits: 0,
     }).format(value);
   };
+
+  // Dollar amounts are usually under 1000, so only abbreviate from there
+  const formatAxis = (v) => (Math.abs(v) >= 1000 ? `${(v / 1000).toFixed(0)}k` : `${v}`);
 
   // Keep "Sin categoría" out of the pie chart (it can dwarf every real
   // category visually) and surface it as a separate callout instead.
@@ -143,6 +148,12 @@ function DashboardPage() {
             Transacciones
           </Link>
           <Link
+            to="/reports"
+            className="text-slate-400 hover:text-white"
+          >
+            Reportes
+          </Link>
+          <Link
             to="/purchase"
             className="text-slate-400 hover:text-white"
           >
@@ -167,7 +178,22 @@ function DashboardPage() {
       </header>
 
       <main className="px-6 py-8">
-        <h2 className="mb-6 text-2xl font-semibold">Dashboard</h2>
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">Dashboard</h2>
+          <div className="flex gap-1 rounded-lg border border-slate-800 p-1 text-xs">
+            {["UYU", "USD"].map((c) => (
+              <button
+                key={c}
+                onClick={() => setCurrency(c)}
+                className={`rounded px-3 py-1 ${
+                  currency === c ? "bg-indigo-500 text-white" : "text-slate-400 hover:text-white"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
@@ -200,7 +226,7 @@ function DashboardPage() {
                 <BarChart data={byMonth}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                   <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
-                  <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={formatAxis} />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
                     formatter={(value) => [formatCurrency(value), "Total"]}
@@ -310,7 +336,7 @@ function DashboardPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={byBank} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                  <XAxis type="number" stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis type="number" stroke="#94a3b8" fontSize={12} tickFormatter={formatAxis} />
                   <YAxis dataKey="bank" type="category" stroke="#94a3b8" fontSize={12} width={100} />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
@@ -351,7 +377,7 @@ function DashboardPage() {
                 <BarChart data={topMerchants}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                   <XAxis dataKey="merchant" stroke="#94a3b8" fontSize={12} />
-                  <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={formatAxis} />
                   <Tooltip
                     contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
                     formatter={(value) => [formatCurrency(value), "Total"]}
@@ -370,7 +396,7 @@ function DashboardPage() {
               <LineChart data={trends}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={formatAxis} />
                 <Tooltip
                   contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
                   formatter={(value) => [formatCurrency(value), "Total"]}
