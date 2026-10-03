@@ -25,3 +25,8 @@ export const deleteStatement = async (id) => {
   await api.delete(`/statements/${id}`);
 };
 
+
+export const listStatements = async () => {
+  const { data } = await api.get("/statements/");
+  return data;
+};

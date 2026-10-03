@@ -8,6 +8,7 @@ import UploadPage from "./pages/UploadPage";
 import ReviewPage from "./pages/ReviewPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import ReportsPage from "./pages/ReportsPage";
 import PurchaseDashboardPage from "./pages/purchase/PurchaseDashboardPage";
 import PurchaseCartPage from "./pages/purchase/PurchaseCartPage";
 import PurchaseListsPage from "./pages/purchase/PurchaseListsPage";
@@ -61,6 +62,10 @@ function App() {
         <Route
           path="/categories"
           element={isAuthenticated ? <CategoriesPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/reports"
+          element={isAuthenticated ? <ReportsPage /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/upload"
