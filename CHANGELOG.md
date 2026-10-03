@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.5.0] - 3 Oct 2026
+
 ### Added
 
 - Reportes page (`/reports`, linked from the dashboard header): pick a confirmed statement and see, for UYU and USD separately, the statement total, a category pie and a table with each category's amount and share plus the other charges (insurance, interest, fees), the same numbers as the monthly Itaú report email. Needs the backend's statement report ([finview-backend#41](https://github.com/joaquin-p-olivera/finview-backend/pull/41)). ([#47](https://github.com/joaquin-p-olivera/finview-frontend/pull/47))
