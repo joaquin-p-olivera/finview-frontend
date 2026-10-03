@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Editing a product in the cart no longer runs off the screen on phones: the name goes on its own line, then price and quantity, then "Guardar" and "Cancelar". Desktop is unchanged. ([#46](https://github.com/joaquin-p-olivera/finview-frontend/pull/46))
+
 ## [1.4.0] - 3 Oct 2026
 
 ### Added
