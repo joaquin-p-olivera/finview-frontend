@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Offline/hybrid mode for shopping: the cart, lists and purchase dashboard open from a copy saved on the phone and refresh in the background, and adding, editing or removing cart products (and ticking a list item into the cart) is shown at once and queued on the phone, then sent automatically when there's a connection, without duplicates. A banner shows how many changes are still unsent. A service worker keeps the app itself on the phone so it opens without signal. Finishing a cart first sends the queue and waits for a connection if needed. Needs the backend's client-generated cart item ids ([finview-backend#35](https://github.com/joaquin-p-olivera/finview-backend/pull/35)). ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- Offline/hybrid mode for shopping: the cart, lists and purchase dashboard open from a copy saved on the phone and refresh in the background, and adding, editing or removing cart products (and ticking a list item into the cart) is shown at once and queued on the phone, then sent automatically when there's a connection, without duplicates. A banner shows how many changes are still unsent. A service worker keeps the app itself on the phone so it opens without signal. Finishing a cart first sends the queue and waits for a connection if needed. Needs the backend's client-generated cart item ids ([finview-backend#35](https://github.com/joaquin-p-olivera/finview-backend/pull/35)). ([#39](https://github.com/joaquin-p-olivera/finview-frontend/pull/39))
 
 ### Changed
 
