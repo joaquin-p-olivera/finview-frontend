@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.4.0] - 3 Oct 2026
+
 ### Added
 
 - Supermarkets for carts come from an editable list: starting a cart now means picking a store from the list (most used first) or choosing "+ Agregar nuevo…" to type one, which is added to the list, so every cart of the same store has the same name. A new Supermercados page (linked from the carts header) adds, renames and deletes stores; renaming one renames its carts too. Needs the backend's stores endpoints ([finview-backend#39](https://github.com/joaquin-p-olivera/finview-backend/pull/39)). ([#42](https://github.com/joaquin-p-olivera/finview-frontend/pull/42))
