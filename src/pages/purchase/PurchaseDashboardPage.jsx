@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore";
 import {
   getActiveCart,
   listPurchaseCarts,
@@ -20,11 +19,11 @@ import {
   useOutbox,
   writeCache,
 } from "../../offline/purchaseOffline";
+import AppHeader from "../../components/common/AppHeader";
 
 const NEW_STORE = "__new__";
 
 function PurchaseDashboardPage() {
-  const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
   // The last data the server returned opens the page instantly and without
   // signal; it's refreshed in the background.
@@ -129,38 +128,15 @@ function PurchaseDashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <div className="flex items-center gap-3 text-sm">
-          <Link to="/transactions" className="text-slate-400 hover:text-white">
-            Gastos
-          </Link>
-          <Link
-            to="/purchase/lists"
-            className="text-slate-400 hover:text-white"
-          >
-            Listas
-          </Link>
-          <Link
-            to="/purchase/stores"
-            className="text-slate-400 hover:text-white"
-          >
-            Supermercados
-          </Link>
-          <Link
-            to="/purchase/stats"
-            className="text-slate-400 hover:text-white"
-          >
-            Stats
-          </Link>
-          <button
-            onClick={logout}
-            className="rounded-md border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/transactions", label: "Gastos" },
+          { to: "/purchase/lists", label: "Listas" },
+          { to: "/purchase/stores", label: "Supermercados" },
+          { to: "/purchase/stats", label: "Stats" },
+        ]}
+        showLogout
+      />
 
       <main className="mx-auto max-w-5xl px-6 py-8">
         <SyncBanner pending={activeCart ? pendingCountFor(ops, activeCart.id) : 0} stale={stale} />

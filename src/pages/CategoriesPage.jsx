@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 import { listCategories, createCategory, deleteCategory } from "../api/categories";
+import AppHeader from "../components/common/AppHeader";
 
 function CategoriesPage() {
-  const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,29 +63,14 @@ function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <div className="flex items-center gap-3 text-sm">
-          <Link to="/dashboard" className="text-slate-400 hover:text-white">
-            Dashboard
-          </Link>
-          <Link to="/purchase" className="text-slate-400 hover:text-white">
-            Compras
-          </Link>
-          <Link
-            to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
-          >
-            Subir estado
-          </Link>
-          <button
-            onClick={logout}
-            className="rounded-md border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:bg-slate-800"
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/purchase", label: "Compras" },
+        ]}
+        showUpload
+        showLogout
+      />
 
       <main className="mx-auto max-w-3xl px-6 py-8">
         <div className="mb-8">
@@ -98,15 +82,15 @@ function CategoriesPage() {
 
         <form onSubmit={handleCreate} className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
           <h3 className="mb-4 text-lg font-medium">Nueva categoría</h3>
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <input
               type="text"
               placeholder="Nombre de la categoría"
               value={newCategory.name}
               onChange={(e) => setNewCategory((prev) => ({ ...prev, name: e.target.value }))}
-              className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
+              className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 p-1 sm:p-0">
               {colors.map((c) => (
                 <button
                   key={c}
