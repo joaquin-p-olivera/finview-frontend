@@ -82,15 +82,15 @@ function CategoriesPage() {
 
         <form onSubmit={handleCreate} className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
           <h3 className="mb-4 text-lg font-medium">Nueva categoría</h3>
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <input
               type="text"
               placeholder="Nombre de la categoría"
               value={newCategory.name}
               onChange={(e) => setNewCategory((prev) => ({ ...prev, name: e.target.value }))}
-              className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
+              className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 p-1 sm:p-0">
               {colors.map((c) => (
                 <button
                   key={c}
