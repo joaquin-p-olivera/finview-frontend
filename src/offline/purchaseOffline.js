@@ -14,6 +14,7 @@ export const cacheKeys = {
   list: (id) => `list.${id}`,
   activeCart: "purchaseActiveCart",
   categories: "purchaseCategories",
+  products: "purchaseProducts",
   dashboard: "purchaseDashboard",
 };
 

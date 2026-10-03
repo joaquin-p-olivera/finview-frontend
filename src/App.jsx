@@ -16,6 +16,7 @@ import PurchaseListDetailPage from "./pages/purchase/PurchaseListDetailPage";
 import PurchaseCategoriesPage from "./pages/purchase/PurchaseCategoriesPage";
 import PurchaseStatsPage from "./pages/purchase/PurchaseStatsPage";
 import PurchaseStoresPage from "./pages/purchase/PurchaseStoresPage";
+import PurchaseProductsPage from "./pages/purchase/PurchaseProductsPage";
 import { useAuthStore } from "./store/authStore";
 import { fetchMe } from "./api/auth";
 
@@ -98,6 +99,10 @@ function App() {
         <Route
           path="/purchase/stores"
           element={isAuthenticated ? <PurchaseStoresPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/purchase/products"
+          element={isAuthenticated ? <PurchaseProductsPage /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/purchase/stats"
