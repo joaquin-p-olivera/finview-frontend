@@ -20,6 +20,31 @@ export const deletePurchaseCategory = async (id) => {
   return data;
 };
 
+export const listPurchaseProducts = async () => {
+  const { data } = await api.get("/purchase/products");
+  return data;
+};
+
+export const updatePurchaseProduct = async (id, product) => {
+  const { data } = await api.put(`/purchase/products/${id}`, product);
+  return data;
+};
+
+export const mergePurchaseProduct = async (id, intoProductId) => {
+  const { data } = await api.post(`/purchase/products/${id}/merge`, { into_product_id: intoProductId });
+  return data;
+};
+
+export const countUnlinkedPurchaseItems = async () => {
+  const { data } = await api.get("/purchase/products/unlinked-items");
+  return data.count;
+};
+
+export const linkPurchaseItemsToProducts = async () => {
+  const { data } = await api.post("/purchase/products/link-items");
+  return data;
+};
+
 export const listPurchaseStores = async () => {
   const { data } = await api.get("/purchase/stores");
   return data;
