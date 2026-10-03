@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { clearAll } from "../offline/storage";
 
 const storedToken = localStorage.getItem("access_token");
 
@@ -20,6 +21,8 @@ export const useAuthStore = create((set) => ({
 
   logout: () => {
     localStorage.removeItem("access_token");
+    // Cached carts and lists belong to this account.
+    clearAll();
     set({ accessToken: null, user: null });
   }
 }));

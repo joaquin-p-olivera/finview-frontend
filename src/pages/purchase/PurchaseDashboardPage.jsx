@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
 import {
@@ -9,17 +9,37 @@ import {
   listPurchaseCategories,
 } from "../../api/purchase";
 import LoadingScreen from "../../components/common/LoadingScreen";
+import SyncBanner from "../../components/common/SyncBanner";
+import { onOutboxSynced } from "../../offline/outbox";
+import {
+  applyCartOps,
+  cacheKeys,
+  pendingCountFor,
+  readCache,
+  useOutbox,
+  writeCache,
+} from "../../offline/purchaseOffline";
 
 function PurchaseDashboardPage() {
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
-  const [activeCart, setActiveCart] = useState(null);
-  const [carts, setCarts] = useState([]);
-  const [lists, setLists] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // The last data the server returned opens the page instantly and without
+  // signal; it's refreshed in the background.
+  const [cached] = useState(() => readCache(cacheKeys.dashboard));
+  const [serverActiveCart, setActiveCart] = useState(cached?.activeCart ?? null);
+  const [carts, setCarts] = useState(cached?.carts ?? []);
+  const [lists, setLists] = useState(cached?.lists ?? []);
+  const [categories, setCategories] = useState(cached?.categories ?? []);
+  const [loading, setLoading] = useState(!cached);
+  const [stale, setStale] = useState(false);
   const [newCartName, setNewCartName] = useState("");
   const [creatingCart, setCreatingCart] = useState(false);
+  const { ops } = useOutbox();
+
+  const activeCart = useMemo(
+    () => applyCartOps(serverActiveCart, ops, categories),
+    [serverActiveCart, ops, categories]
+  );
 
   const fetchData = async () => {
     try {
@@ -33,8 +53,13 @@ function PurchaseDashboardPage() {
       setCarts(cartsData);
       setLists(listsData);
       setCategories(catsData);
+      writeCache(cacheKeys.dashboard, { activeCart: active, carts: cartsData, lists: listsData, categories: catsData });
+      writeCache(cacheKeys.activeCart, active);
+      writeCache(cacheKeys.categories, catsData);
+      setStale(false);
     } catch (err) {
       console.error(err);
+      setStale(true);
     } finally {
       setLoading(false);
     }
@@ -42,6 +67,7 @@ function PurchaseDashboardPage() {
 
   useEffect(() => {
     fetchData();
+    return onOutboxSynced(() => fetchData());
   }, []);
 
   const handleCreateCart = async (e) => {
@@ -110,6 +136,8 @@ function PurchaseDashboardPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-8">
+        <SyncBanner pending={activeCart ? pendingCountFor(ops, activeCart.id) : 0} stale={stale} />
+
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="mb-1 text-3xl font-bold">Carrito de Compras</h1>
