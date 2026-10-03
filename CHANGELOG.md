@@ -10,6 +10,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - The header no longer overflows on phones: "Finview", a one-line "Subir estado" button and a menu button fit the screen, and the menu holds the page links, the username and "Cerrar sesión". The color picker on Categorías no longer runs off the screen on phones: the form stacks and the colors wrap onto two rows. Desktop is unchanged. ([#45](https://github.com/joaquin-p-olivera/finview-frontend/pull/45))
+- Editing a product in the cart no longer runs off the screen on phones: the name goes on its own line, then price and quantity, then "Guardar" and "Cancelar". Desktop is unchanged. ([#46](https://github.com/joaquin-p-olivera/finview-frontend/pull/46))
 
 ## [1.4.0] - 3 Oct 2026
 
