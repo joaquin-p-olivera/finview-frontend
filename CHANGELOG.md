@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- The header no longer overflows on phones: "Finview", a one-line "Subir estado" button and a menu button fit the screen, and the menu holds the page links, the username and "Cerrar sesión". Desktop is unchanged. ([#45](https://github.com/joaquin-p-olivera/finview-frontend/pull/45))
+
 ## [1.4.0] - 3 Oct 2026
 
 ### Added
