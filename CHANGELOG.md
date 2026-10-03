@@ -7,6 +7,18 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.5.0] - 3 Oct 2026
+
+### Added
+
+- Reportes page (`/reports`, linked from the dashboard header): pick a confirmed statement and see, for UYU and USD separately, the statement total, a category pie and a table with each category's amount and share plus the other charges (insurance, interest, fees), the same numbers as the monthly Itaú report email. Needs the backend's statement report ([finview-backend#41](https://github.com/joaquin-p-olivera/finview-backend/pull/41)). ([#47](https://github.com/joaquin-p-olivera/finview-frontend/pull/47))
+
+### Fixed
+
+- The header no longer overflows on phones: "Finview", a one-line "Subir estado" button and a menu button fit the screen, and the menu holds the page links, the username and "Cerrar sesión". The color picker on Categorías no longer runs off the screen on phones: the form stacks and the colors wrap onto two rows. Desktop is unchanged. ([#45](https://github.com/joaquin-p-olivera/finview-frontend/pull/45))
+- Editing a product in the cart no longer runs off the screen on phones: the name goes on its own line, then price and quantity, then "Guardar" and "Cancelar". Desktop is unchanged. ([#46](https://github.com/joaquin-p-olivera/finview-frontend/pull/46))
+- The dashboard no longer adds dollars to pesos: a UYU / USD toggle switches every chart and total to one currency, and amounts are formatted in that currency. ([#47](https://github.com/joaquin-p-olivera/finview-frontend/pull/47))
+
 ## [1.4.0] - 3 Oct 2026
 
 ### Added

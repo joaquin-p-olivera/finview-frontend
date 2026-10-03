@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
 import { getTransactions, deleteTransaction } from "../api/stats";
+import AppHeader from "../components/common/AppHeader";
 
 function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
@@ -87,23 +86,13 @@ function TransactionsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
-      <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
-        <div className="flex items-center gap-3 text-sm">
-          <Link to="/dashboard" className="text-slate-400 hover:text-white">
-            Dashboard
-          </Link>
-          <Link to="/purchase" className="text-slate-400 hover:text-white">
-            Compras
-          </Link>
-          <Link
-            to="/upload"
-            className="rounded-md bg-indigo-500 px-3 py-1 text-xs font-medium text-white shadow-xs hover:bg-indigo-400"
-          >
-            Subir estado
-          </Link>
-        </div>
-      </header>
+      <AppHeader
+        links={[
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/purchase", label: "Compras" },
+        ]}
+        showUpload
+      />
 
       <main className="px-6 py-8">
         <div className="mb-6 flex items-center justify-between">
