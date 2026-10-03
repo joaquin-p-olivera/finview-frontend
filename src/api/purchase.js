@@ -20,6 +20,26 @@ export const deletePurchaseCategory = async (id) => {
   return data;
 };
 
+export const listPurchaseStores = async () => {
+  const { data } = await api.get("/purchase/stores");
+  return data;
+};
+
+export const createPurchaseStore = async (store) => {
+  const { data } = await api.post("/purchase/stores", store);
+  return data;
+};
+
+export const updatePurchaseStore = async (id, store) => {
+  const { data } = await api.put(`/purchase/stores/${id}`, store);
+  return data;
+};
+
+export const deletePurchaseStore = async (id) => {
+  const { data } = await api.delete(`/purchase/stores/${id}`);
+  return data;
+};
+
 export const listPurchaseCarts = async (limit = 20) => {
   const { data } = await api.get(`/purchase/carts?limit=${limit}`);
   return data;
