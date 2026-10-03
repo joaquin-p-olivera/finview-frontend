@@ -130,6 +130,16 @@ import { getActiveCart } from "../api/purchase";
 
 Using `recharts` library. See `PurchaseStatsPage.jsx` for examples.
 
+## Offline / hybrid mode (purchase module)
+
+Meant for the supermarket, where mobile data is unreliable:
+
+- `public/sw.js` (service worker, registered in production from `main.jsx`) keeps `index.html` and the hashed `/assets/*` on the phone, so the app opens without signal. It never touches API calls.
+- `src/offline/outbox.js`: queue of writes in localStorage (`finview.outbox`), sent in order with backoff when there's a connection (`online` event, app back in foreground, timer). Each write reuses its own `Idempotency-Key`; 400/404/409/422 drop the write (a `DELETE` that gets 404 counts as done), anything else keeps it. The queue is kept across logouts.
+- `src/offline/purchaseOffline.js`: cached server data (`finview.cart.<id>`, `finview.list.<id>`, dashboard, categories) and helpers that lay queued writes over it (`applyCartOps`, `applyListOps`). Cart adds send a client-generated item `id`, which the backend uses to avoid duplicates even after a restart.
+- Queued today: add/edit/delete cart items (cart page) and "check list item + add to cart" (list detail page). Everything else (creating carts or lists, categories, finishing a cart) still needs a connection; finishing a cart first sends the queue and refuses while anything is left.
+- `SyncBanner` shows pending changes, connection errors and when saved data is being shown.
+
 ## Notes
 
 - All monetary values displayed in UYU (Uruguayan Pesos)

@@ -1,25 +1,43 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   getPurchaseCart,
-  addCartItem,
-  updateCartItem,
-  deleteCartItem,
   completeCart,
   listPurchaseCategories,
 } from "../../api/purchase";
 import { getErrorMessage } from "../../api/client";
 import LoadingScreen from "../../components/common/LoadingScreen";
+import SyncBanner from "../../components/common/SyncBanner";
+import { flushOutbox, getOutboxState, onOutboxOpSent, onOutboxSynced } from "../../offline/outbox";
+import {
+  applyCartOps,
+  cacheKeys,
+  pendingCountFor,
+  queueAddCartItem,
+  queueDeleteCartItem,
+  queueUpdateCartItem,
+  readCache,
+  useOutbox,
+  writeCache,
+} from "../../offline/purchaseOffline";
 
 function PurchaseCartPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [cart, setCart] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // The last copy the server returned opens the page instantly, even without
+  // signal; it's refreshed in the background.
+  const [serverCart, setServerCart] = useState(() => readCache(cacheKeys.cart(id)));
+  const [categories, setCategories] = useState(() => readCache(cacheKeys.categories) || []);
+  const [loading, setLoading] = useState(() => !readCache(cacheKeys.cart(id)));
+  const [stale, setStale] = useState(false);
   const [newItem, setNewItem] = useState({ product_name: "", price: "", quantity: 1, category_id: "" });
-  const [adding, setAdding] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [completing, setCompleting] = useState(false);
+  const { ops } = useOutbox();
+
+  // What the user sees: the server's cart plus every change not sent yet.
+  const cart = useMemo(() => applyCartOps(serverCart, ops, categories), [serverCart, ops, categories]);
+  const pending = pendingCountFor(ops, id);
 
   const fetchData = async ({ initial = false } = {}) => {
     try {
@@ -27,13 +45,22 @@ function PurchaseCartPage() {
         getPurchaseCart(id),
         listPurchaseCategories(),
       ]);
-      setCart(cartData);
+      setServerCart(cartData);
       setCategories(catsData);
+      writeCache(cacheKeys.cart(id), cartData);
+      writeCache(cacheKeys.categories, catsData);
+      setStale(false);
     } catch (err) {
       console.error(err);
-      // Only leave the page if the cart can't be opened at all; a failed
-      // refresh after adding or editing an item keeps the user where they are.
-      if (initial) navigate("/purchase");
+      if (err.response?.status === 404) {
+        writeCache(cacheKeys.cart(id), null);
+        navigate("/purchase");
+        return;
+      }
+      // Without a saved copy there's nothing to show; with one, keep working
+      // from it.
+      if (initial && !readCache(cacheKeys.cart(id))) navigate("/purchase");
+      else setStale(true);
     } finally {
       setLoading(false);
     }
@@ -41,56 +68,68 @@ function PurchaseCartPage() {
 
   useEffect(() => {
     fetchData({ initial: true });
+    // Each change the server accepts becomes part of the saved copy right
+    // away, so it doesn't flicker while the rest of the queue is sent...
+    const offSent = onOutboxOpSent((op, data) => {
+      if (op.cartId !== id) return;
+      setServerCart((prev) => {
+        const sentOp = op.kind === "cart-add" && data ? { ...op, data: { ...op.data, ...data } } : op;
+        const next = applyCartOps(prev, [sentOp], readCache(cacheKeys.categories));
+        if (!next) return next;
+        const saved = { ...next, items: next.items.map(({ pending, ...item }) => item) };
+        writeCache(cacheKeys.cart(id), saved);
+        return saved;
+      });
+    });
+    // ...and once the whole queue is sent, reload the server's version.
+    const offSynced = onOutboxSynced(() => fetchData());
+    return () => {
+      offSent();
+      offSynced();
+    };
   }, [id]);
 
-  const handleAddItem = async (e) => {
+  const handleAddItem = (e) => {
     e.preventDefault();
     if (!newItem.product_name || !newItem.price) return;
-    
-    setAdding(true);
-    try {
-      await addCartItem(id, {
-        product_name: newItem.product_name,
-        price: parseFloat(newItem.price),
-        quantity: parseInt(newItem.quantity) || 1,
-        category_id: newItem.category_id || null,
-      });
-      setNewItem({ product_name: "", price: "", quantity: 1, category_id: "" });
-      fetchData();
-    } catch (err) {
-      alert(getErrorMessage(err, "Error al agregar item"));
-    } finally {
-      setAdding(false);
-    }
+
+    queueAddCartItem(id, {
+      product_name: newItem.product_name,
+      price: parseFloat(newItem.price),
+      quantity: parseInt(newItem.quantity) || 1,
+      category_id: newItem.category_id || null,
+    });
+    setNewItem({ product_name: "", price: "", quantity: 1, category_id: "" });
   };
 
-  const handleUpdateItem = async (itemId, updates) => {
-    try {
-      await updateCartItem(id, itemId, updates);
-      setEditingItem(null);
-      fetchData();
-    } catch (err) {
-      alert(getErrorMessage(err, "Error al actualizar item"));
-    }
+  const handleUpdateItem = (item, updates) => {
+    queueUpdateCartItem(id, item.id, updates, updates.product_name || item.product_name);
+    setEditingItem(null);
   };
 
-  const handleDeleteItem = async (itemId) => {
+  const handleDeleteItem = (item) => {
     if (!confirm("¿Eliminar este producto?")) return;
-    try {
-      await deleteCartItem(id, itemId);
-      fetchData();
-    } catch (err) {
-      alert(getErrorMessage(err, "Error al eliminar item"));
-    }
+    queueDeleteCartItem(id, item.id, item.product_name);
   };
 
   const handleComplete = async () => {
     if (!confirm("¿Finalizar este carrito?")) return;
+    setCompleting(true);
     try {
+      // Everything added in the store has to reach the server before the
+      // cart is closed.
+      await flushOutbox();
+      if (pendingCountFor(getOutboxState().ops, id) > 0) {
+        alert("Todavía hay productos sin enviar al servidor. Quedan guardados en el teléfono; finalizá el carrito cuando haya conexión.");
+        return;
+      }
       await completeCart(id);
+      writeCache(cacheKeys.cart(id), null);
       navigate("/purchase");
     } catch (err) {
       alert(getErrorMessage(err, "Error al completar carrito"));
+    } finally {
+      setCompleting(false);
     }
   };
 
@@ -127,9 +166,10 @@ function PurchaseCartPage() {
         {cart.is_active ? (
           <button
             onClick={handleComplete}
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
+            disabled={completing}
+            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-50"
           >
-            Finalizar Compra
+            {completing ? "Finalizando..." : "Finalizar Compra"}
           </button>
         ) : (
           <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-400">
@@ -139,6 +179,8 @@ function PurchaseCartPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-8">
+        <SyncBanner pending={pending} stale={stale} />
+
         {/* Add Item Form */}
         {cart.is_active && (
         <form onSubmit={handleAddItem} className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
@@ -171,10 +213,9 @@ function PurchaseCartPage() {
             />
             <button
               type="submit"
-              disabled={adding}
-              className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 disabled:opacity-50"
+              className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400"
             >
-              {adding ? "Agregando..." : "Agregar"}
+              Agregar
             </button>
           </div>
           {categories.length > 0 && (
@@ -230,7 +271,7 @@ function PurchaseCartPage() {
                         className="w-16 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm"
                       />
                       <button
-                        onClick={() => handleUpdateItem(item.id, {
+                        onClick={() => handleUpdateItem(item, {
                           product_name: document.getElementById(`edit-name-${item.id}`).value,
                           price: parseFloat(document.getElementById(`edit-price-${item.id}`).value),
                           quantity: parseInt(document.getElementById(`edit-qty-${item.id}`).value),
@@ -260,6 +301,9 @@ function PurchaseCartPage() {
                             </span>
                           )}
                           <span>x{item.quantity}</span>
+                          {item.pending && (
+                            <span className="text-xs text-amber-300">Sin enviar</span>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
@@ -273,7 +317,7 @@ function PurchaseCartPage() {
                               Editar
                             </button>
                             <button
-                              onClick={() => handleDeleteItem(item.id)}
+                              onClick={() => handleDeleteItem(item)}
                               className="text-sm text-red-400 hover:text-red-300"
                             >
                               Eliminar

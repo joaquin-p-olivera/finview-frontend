@@ -1,39 +1,61 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   getPurchaseList,
   addListItem,
-  updateListItem,
   deleteListItem,
   getActiveCart,
-  addListItemToCart,
 } from "../../api/purchase";
 import LoadingScreen from "../../components/common/LoadingScreen";
+import SyncBanner from "../../components/common/SyncBanner";
 import { getErrorMessage } from "../../api/client";
+import { onOutboxOpSent, onOutboxSynced } from "../../offline/outbox";
+import {
+  applyListOps,
+  cacheKeys,
+  queueAddCartItem,
+  queueUpdateListItem,
+  readCache,
+  useOutbox,
+  writeCache,
+} from "../../offline/purchaseOffline";
 
 function PurchaseListDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [list, setList] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Saved copies open the list without signal; see PurchaseCartPage.
+  const [serverList, setServerList] = useState(() => readCache(cacheKeys.list(id)));
+  const [loading, setLoading] = useState(() => !readCache(cacheKeys.list(id)));
+  const [stale, setStale] = useState(false);
   const [newItem, setNewItem] = useState({ product_name: "", quantity: "" });
   const [adding, setAdding] = useState(false);
-  const [activeCart, setActiveCart] = useState(null);
+  const [activeCart, setActiveCart] = useState(() => readCache(cacheKeys.activeCart));
   const [modalItem, setModalItem] = useState(null);
   const [modalData, setModalData] = useState({ price: "", quantity: 1 });
-  const [addingToCart, setAddingToCart] = useState(false);
+  const { ops } = useOutbox();
+
+  const list = useMemo(() => applyListOps(serverList, ops), [serverList, ops]);
+  const pending = ops.filter((op) => op.listId === id || (activeCart && op.cartId === activeCart.id)).length;
 
   const fetchData = async () => {
     try {
-      const [listData, cartData] = await Promise.all([
-        getPurchaseList(id),
-        getActiveCart().catch(() => null),
-      ]);
-      setList(listData);
-      setActiveCart(cartData);
+      const listData = await getPurchaseList(id);
+      setServerList(listData);
+      writeCache(cacheKeys.list(id), listData);
+      setStale(false);
+      const cartData = await getActiveCart().catch(() => undefined);
+      if (cartData !== undefined) {
+        setActiveCart(cartData);
+        writeCache(cacheKeys.activeCart, cartData);
+      }
     } catch (err) {
       console.error(err);
-      navigate("/purchase/lists");
+      if (err.response?.status === 404 || !readCache(cacheKeys.list(id))) {
+        writeCache(cacheKeys.list(id), null);
+        navigate("/purchase/lists");
+      } else {
+        setStale(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -41,6 +63,21 @@ function PurchaseListDetailPage() {
 
   useEffect(() => {
     fetchData();
+    const offSent = onOutboxOpSent((op) => {
+      if (op.kind !== "list-update" || op.listId !== id) return;
+      setServerList((prev) => {
+        const next = applyListOps(prev, [op]);
+        if (!next) return next;
+        const saved = { ...next, items: next.items.map(({ pending, ...item }) => item) };
+        writeCache(cacheKeys.list(id), saved);
+        return saved;
+      });
+    });
+    const offSynced = onOutboxSynced(() => fetchData());
+    return () => {
+      offSent();
+      offSynced();
+    };
   }, [id]);
 
   const handleAddItem = async (e) => {
@@ -62,40 +99,31 @@ function PurchaseListDetailPage() {
     }
   };
 
-  const handleOpenModal = async (item) => {
+  const handleOpenModal = (item) => {
     if (!activeCart) {
       alert("No hay un carrito activo. Creá uno primero en Carrito de Compras.");
       return;
     }
     if (item.is_checked) {
-      try {
-        await updateListItem(id, item.id, { is_checked: false });
-        fetchData();
-      } catch (err) {
-        alert("Error al desmarcar item");
-      }
+      queueUpdateListItem(id, item.id, { is_checked: false }, item.product_name);
       return;
     }
     setModalItem(item);
     setModalData({ price: "", quantity: item.quantity || 1 });
   };
 
-  const handleAddToCartSingle = async () => {
+  // Queued like the cart page's adds, so it works without signal: the product
+  // goes into the active cart and the list item is ticked.
+  const handleAddToCartSingle = () => {
     if (!modalData.price || !modalData.quantity) return;
-    setAddingToCart(true);
-    try {
-      await addListItemToCart(id, modalItem.id, activeCart.id, {
-        price: parseFloat(modalData.price),
-        quantity: parseInt(modalData.quantity),
-      });
-      await updateListItem(id, modalItem.id, { is_checked: true });
-      setModalItem(null);
-      fetchData();
-    } catch (err) {
-      alert(getErrorMessage(err, "Error al agregar al carrito"));
-    } finally {
-      setAddingToCart(false);
-    }
+    queueAddCartItem(activeCart.id, {
+      product_name: modalItem.product_name,
+      price: parseFloat(modalData.price),
+      quantity: parseInt(modalData.quantity),
+      category_id: null,
+    });
+    queueUpdateListItem(id, modalItem.id, { is_checked: true }, modalItem.product_name);
+    setModalItem(null);
   };
 
   const handleDeleteItem = async (itemId) => {
@@ -129,6 +157,8 @@ function PurchaseListDetailPage() {
       </header>
 
       <main className="mx-auto max-w-3xl px-6 py-8">
+        <SyncBanner pending={pending} stale={stale} />
+
         <div className="mb-8">
           <h1 className="mb-1 text-3xl font-bold">{list.name}</h1>
           <p className="text-slate-400">
@@ -245,10 +275,10 @@ function PurchaseListDetailPage() {
               </button>
               <button
                 onClick={handleAddToCartSingle}
-                disabled={addingToCart || !modalData.price}
+                disabled={!modalData.price}
                 className="flex-1 rounded-lg bg-emerald-600 py-2 text-white hover:bg-emerald-500 disabled:opacity-50"
               >
-                {addingToCart ? "Agregando..." : "Agregar"}
+                Agregar
               </button>
             </div>
           </div>
