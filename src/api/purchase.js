@@ -35,6 +35,17 @@ export const mergePurchaseProduct = async (id, intoProductId) => {
   return data;
 };
 
+export const categorizePurchaseProducts = async () => {
+  // Claude can take a while with a long history.
+  const { data } = await api.post("/purchase/products/categorize", null, { timeout: 180000 });
+  return data;
+};
+
+export const dismissPurchaseProductSuggestion = async (id) => {
+  const { data } = await api.post(`/purchase/products/${id}/dismiss-suggestion`);
+  return data;
+};
+
 export const countUnlinkedPurchaseItems = async () => {
   const { data } = await api.get("/purchase/products/unlinked-items");
   return data.count;

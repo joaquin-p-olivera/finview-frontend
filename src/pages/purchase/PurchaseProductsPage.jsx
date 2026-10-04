@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
+  categorizePurchaseProducts,
   countUnlinkedPurchaseItems,
+  dismissPurchaseProductSuggestion,
   linkPurchaseItemsToProducts,
   listPurchaseCategories,
   listPurchaseProducts,
@@ -21,6 +23,7 @@ function PurchaseProductsPage() {
   const [unlinked, setUnlinked] = useState(0);
   const [loading, setLoading] = useState(true);
   const [linking, setLinking] = useState(false);
+  const [categorizing, setCategorizing] = useState(false);
   const [query, setQuery] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
@@ -61,6 +64,30 @@ function PurchaseProductsPage() {
       alert(getErrorMessage(err, "No se pudo agrupar el historial"));
     } finally {
       setLinking(false);
+    }
+  };
+
+  const handleCategorize = async () => {
+    setCategorizing(true);
+    try {
+      const result = await categorizePurchaseProducts();
+      const lines = [`${result.categorized} productos categorizados.`];
+      if (result.new_categories.length > 0) lines.push(`Categorías nuevas: ${result.new_categories.join(", ")}.`);
+      if (result.suggestions > 0) lines.push(`${result.suggestions} sugerencias para revisar.`);
+      alert(lines.join("\n"));
+      fetchData();
+    } catch (err) {
+      alert(getErrorMessage(err, "No se pudo categorizar con IA"));
+    } finally {
+      setCategorizing(false);
+    }
+  };
+
+  const handleDismiss = async (product) => {
+    try {
+      replaceProduct(await dismissPurchaseProductSuggestion(product.id));
+    } catch (err) {
+      alert(getErrorMessage(err, "No se pudo descartar la sugerencia"));
     }
   };
 
@@ -111,6 +138,7 @@ function PurchaseProductsPage() {
   }, [products, query]);
 
   const uncategorized = products.filter((p) => !p.category_id).length;
+  const toReview = products.filter((p) => p.suggested_merge_into_id || p.ai_note).length;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -142,6 +170,22 @@ function PurchaseProductsPage() {
           </div>
         )}
 
+        {unlinked === 0 && uncategorized > 0 && (
+          <div className="mb-6 flex flex-col gap-3 rounded-xl border border-indigo-700/50 bg-indigo-900/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-indigo-200">
+              {uncategorized} {uncategorized === 1 ? "producto sin categoría" : "productos sin categoría"}. Claude puede
+              categorizarlos usando tus categorías o creando nuevas; después podés cambiar las que no te cierren.
+            </p>
+            <button
+              onClick={handleCategorize}
+              disabled={categorizing}
+              className="shrink-0 rounded-lg bg-indigo-500 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-400 disabled:opacity-50"
+            >
+              {categorizing ? "Categorizando..." : "Categorizar con IA"}
+            </button>
+          </div>
+        )}
+
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <input
             type="search"
@@ -153,6 +197,7 @@ function PurchaseProductsPage() {
           {products.length > 0 && (
             <p className="text-sm text-slate-400">
               {products.length} productos · {uncategorized} sin categoría
+              {toReview > 0 && ` · ${toReview} para revisar`}
             </p>
           )}
         </div>
@@ -206,6 +251,28 @@ function PurchaseProductsPage() {
                             </p>
                           </>
                         )}
+                        {product.suggested_merge_into_name && (
+                          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-indigo-900/30 px-3 py-2 text-xs text-indigo-200">
+                            <span>IA: ¿es el mismo producto que "{product.suggested_merge_into_name}"?</span>
+                            <button
+                              onClick={() => handleMerge(product, product.suggested_merge_into_id)}
+                              className="font-medium text-indigo-300 hover:text-white"
+                            >
+                              Unir
+                            </button>
+                            <button onClick={() => handleDismiss(product)} className="text-slate-400 hover:text-white">
+                              No
+                            </button>
+                          </div>
+                        )}
+                        {product.ai_note && !product.suggested_merge_into_name && (
+                          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg bg-amber-900/20 px-3 py-2 text-xs text-amber-200">
+                            <span>IA: {product.ai_note}</span>
+                            <button onClick={() => handleDismiss(product)} className="text-slate-400 hover:text-white">
+                              Listo
+                            </button>
+                          </div>
+                        )}
                         {mergingId === product.id && (
                           <select
                             autoFocus
@@ -223,6 +290,11 @@ function PurchaseProductsPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-3">
+                        {product.category_source === "ai" && (
+                          <span title="Categoría elegida por la IA" className="rounded bg-indigo-900/50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-300">
+                            IA
+                          </span>
+                        )}
                         <select
                           aria-label="Categoría"
                           value={product.category_id || ""}
