@@ -86,6 +86,11 @@ function LoginPage() {
             Crear cuenta
           </Link>
         </p>
+        <p className="mt-2 text-center text-xs text-slate-400">
+          <Link to="/help" className="hover:text-slate-200">
+            ¿Qué es Finview?
+          </Link>
+        </p>
       </div>
     </div>
   );
