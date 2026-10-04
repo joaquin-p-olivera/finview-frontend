@@ -155,6 +155,16 @@ export const addListItemToCart = async (listId, itemId, cartId, { price, quantit
   return data;
 };
 
+export const getPurchaseAnalytics = async (months = 12) => {
+  const { data } = await api.get(`/purchase/analytics?months=${months}`);
+  return data;
+};
+
+export const getPurchaseProductPrices = async (productId) => {
+  const { data } = await api.get(`/purchase/analytics/products/${productId}/prices`);
+  return data;
+};
+
 export const getPurchaseStats = async (days = 30) => {
   const { data } = await api.get(`/purchase/stats?days=${days}`);
   return data;

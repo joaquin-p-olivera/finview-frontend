@@ -49,6 +49,7 @@ function PurchaseStatsPage() {
     <div className="min-h-screen bg-slate-950 text-slate-50">
       <header className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
         <Link to="/purchase" className="text-lg font-semibold hover:text-indigo-400">← Volver</Link>
+        <Link to="/purchase/analysis" className="text-sm text-indigo-400 hover:text-indigo-300">Análisis por categoría y producto</Link>
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-8">
