@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- "Ayuda" page (`/help`, linked from the header on every page and from the login page): what Finview is and how to use it, from uploading and reviewing a statement to the dashboard, reports, transactions, carts and lists, supermarkets, products with AI categorization, purchase analysis and using the cart without signal. ([#57](https://github.com/joaquin-p-olivera/finview-frontend/pull/57))
+
 ## [1.6.0] - 4 Oct 2026
 
 ### Added
