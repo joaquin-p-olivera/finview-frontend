@@ -4,7 +4,9 @@ import {
   getPurchaseCart,
   completeCart,
   listPurchaseCategories,
+  listPurchaseProducts,
 } from "../../api/purchase";
+import { suggestProducts } from "./productSearch";
 import { getErrorMessage } from "../../api/client";
 import LoadingScreen from "../../components/common/LoadingScreen";
 import SyncBanner from "../../components/common/SyncBanner";
@@ -30,7 +32,10 @@ function PurchaseCartPage() {
   const [categories, setCategories] = useState(() => readCache(cacheKeys.categories) || []);
   const [loading, setLoading] = useState(() => !readCache(cacheKeys.cart(id)));
   const [stale, setStale] = useState(false);
-  const [newItem, setNewItem] = useState({ product_name: "", price: "", quantity: 1, category_id: "" });
+  const [products, setProducts] = useState(() => readCache(cacheKeys.products) || []);
+  const emptyItem = { product_name: "", product_id: null, price: "", quantity: 1, category_id: "" };
+  const [newItem, setNewItem] = useState(emptyItem);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [completing, setCompleting] = useState(false);
   const { ops } = useOutbox();
@@ -39,7 +44,19 @@ function PurchaseCartPage() {
   const cart = useMemo(() => applyCartOps(serverCart, ops, categories), [serverCart, ops, categories]);
   const pending = pendingCountFor(ops, id);
 
+  const fetchProducts = async () => {
+    try {
+      const data = await listPurchaseProducts();
+      setProducts(data);
+      writeCache(cacheKeys.products, data);
+    } catch (err) {
+      // Suggestions are optional: keep the cached ones.
+      console.error(err);
+    }
+  };
+
   const fetchData = async ({ initial = false } = {}) => {
+    fetchProducts();
     try {
       const [cartData, catsData] = await Promise.all([
         getPurchaseCart(id),
@@ -98,8 +115,18 @@ function PurchaseCartPage() {
       price: parseFloat(newItem.price),
       quantity: parseInt(newItem.quantity) || 1,
       category_id: newItem.category_id || null,
+      ...(newItem.product_id ? { product_id: newItem.product_id } : {}),
     });
-    setNewItem({ product_name: "", price: "", quantity: 1, category_id: "" });
+    setNewItem(emptyItem);
+    setShowSuggestions(false);
+  };
+
+  const suggestions = newItem.product_id ? [] : suggestProducts(products, newItem.product_name);
+  const selectedProduct = products.find((p) => p.id === newItem.product_id);
+
+  const pickProduct = (product) => {
+    setNewItem((p) => ({ ...p, product_name: product.name, product_id: product.id }));
+    setShowSuggestions(false);
   };
 
   const handleUpdateItem = (item, updates) => {
@@ -186,17 +213,59 @@ function PurchaseCartPage() {
         <form onSubmit={handleAddItem} className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
           <h2 className="mb-4 text-lg font-semibold">Agregar Producto</h2>
           <div className="grid gap-4 sm:grid-cols-5">
-            <input
-              type="text"
-              placeholder="Producto"
-              value={newItem.product_name}
-              onChange={(e) => setNewItem((p) => ({ ...p, product_name: e.target.value }))}
-              className="sm:col-span-2 rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
-              required
-            />
+            <div className="relative sm:col-span-2">
+              <input
+                type="text"
+                placeholder="Producto"
+                value={newItem.product_name}
+                onChange={(e) => {
+                  setNewItem((p) => ({ ...p, product_name: e.target.value, product_id: null }));
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => setShowSuggestions(true)}
+                // Delayed so a tap on a suggestion lands before the list closes.
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                autoComplete="off"
+                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
+                required
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-lg border border-slate-700 bg-slate-900 shadow-lg">
+                  {suggestions.map((product) => (
+                    <li key={product.id}>
+                      <button
+                        type="button"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickProduct(product)}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-2 text-left text-sm hover:bg-slate-800"
+                      >
+                        <span className="truncate">
+                          {product.name}
+                          {product.category_name && (
+                            <span className="ml-2 text-xs text-slate-400">{product.category_name}</span>
+                          )}
+                        </span>
+                        {product.last_price != null && (
+                          <span className="shrink-0 text-xs text-slate-400">
+                            {formatCurrency(product.last_price)}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {selectedProduct?.category_name && !newItem.category_id && (
+                <p className="mt-1 text-xs text-slate-400">Categoría: {selectedProduct.category_name}</p>
+              )}
+            </div>
             <input
               type="number"
-              placeholder="Precio"
+              placeholder={
+                selectedProduct?.last_price != null
+                  ? `Último: ${selectedProduct.last_price}`
+                  : "Precio"
+              }
               step="0.01"
               value={newItem.price}
               onChange={(e) => setNewItem((p) => ({ ...p, price: e.target.value }))}

@@ -132,8 +132,9 @@ function PurchaseDashboardPage() {
         links={[
           { to: "/transactions", label: "Gastos" },
           { to: "/purchase/lists", label: "Listas" },
+          { to: "/purchase/products", label: "Productos" },
           { to: "/purchase/stores", label: "Supermercados" },
-          { to: "/purchase/stats", label: "Stats" },
+          { to: "/purchase/analysis", label: "Análisis" },
         ]}
         showLogout
       />
@@ -223,12 +224,20 @@ function PurchaseDashboardPage() {
         <section className="mb-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Categorías</h2>
-            <Link
-              to="/purchase/categories"
-              className="text-sm text-indigo-400 hover:text-indigo-300"
-            >
-              Editar categorías
-            </Link>
+            <div className="flex gap-4">
+              <Link
+                to="/purchase/products"
+                className="text-sm text-indigo-400 hover:text-indigo-300"
+              >
+                Productos
+              </Link>
+              <Link
+                to="/purchase/categories"
+                className="text-sm text-indigo-400 hover:text-indigo-300"
+              >
+                Editar categorías
+              </Link>
+            </div>
           </div>
           {categories.length === 0 ? (
             <p className="text-slate-400">

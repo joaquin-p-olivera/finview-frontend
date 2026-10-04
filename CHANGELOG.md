@@ -7,6 +7,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.6.0] - 4 Oct 2026
+
+### Added
+
+- "Análisis" page for purchases (replaces the "Stats" link in the purchase header; the old per-cart totals stay linked from it): spend per category month by month and cart by cart, what went up and down in price since the last purchase, each product's price history by supermarket, your own supermarket inflation (same products compared month to month), where the money goes by product, and which supermarket is cheapest for products bought in more than one. Period of 3, 6 or 12 months, or everything. Needs finview-backend#45. ([#54](https://github.com/joaquin-p-olivera/finview-frontend/pull/54))
+- "Categorizar con IA" on the Productos page: Claude categorizes every product without a category, using your categories or creating new ones, and the result says how many were categorized and which categories are new. Categories chosen by the AI show an "IA" tag (on products and on the categories page). Claude's suggestions appear on each product to confirm or dismiss: "¿es el mismo producto que X?" (Unir / No) and short notes, such as two very different prices. Needs finview-backend#44. ([#53](https://github.com/joaquin-p-olivera/finview-frontend/pull/53))
+- Purchase products: a new "Productos" page (linked from the purchase dashboard) lists everything bought, grouped by product and category, with times bought, last price and store, and price range. Setting a product's category applies it to all of its purchases; two products that are the same can be merged, and the history from before products existed is grouped with one button. While adding to the cart, the product field suggests products already bought (also offline, from the saved list) with their category and last price. Needs finview-backend#43. ([#52](https://github.com/joaquin-p-olivera/finview-frontend/pull/52))
+- MIT license (`LICENSE`). ([#51](https://github.com/joaquin-p-olivera/finview-frontend/pull/51))
+- Finview has a logo: the browser tab and the phone home screen show a magnifying glass over a rising line, and the header shows that icon next to "Finview" instead of plain text. ([#50](https://github.com/joaquin-p-olivera/finview-frontend/pull/50))
+
 ## [1.5.0] - 3 Oct 2026
 
 ### Added

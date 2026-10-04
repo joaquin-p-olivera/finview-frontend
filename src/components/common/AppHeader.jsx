@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
+import Logo from "./Logo";
 
 // Top bar shared by the main pages. On desktop it's the usual row of links;
 // on phones the links, user and logout move into a menu so nothing overflows,
@@ -24,7 +25,9 @@ function AppHeader({ links = [], showUpload = false, showUser = false, showLogou
   return (
     <header className="relative z-30 border-b border-slate-800 bg-slate-950">
       <div className="flex items-center justify-between gap-3 px-4 py-3 md:px-6 md:py-4">
-        <Link to="/" className="text-lg font-semibold hover:text-indigo-400">Finview</Link>
+        <Link to="/" aria-label="Finview, ir al inicio" className="shrink-0 rounded-md hover:opacity-80">
+          <Logo />
+        </Link>
 
         <div className="hidden items-center gap-3 text-sm md:flex">
           {links.map((link) => (

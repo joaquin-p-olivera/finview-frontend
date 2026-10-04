@@ -20,6 +20,42 @@ export const deletePurchaseCategory = async (id) => {
   return data;
 };
 
+export const listPurchaseProducts = async () => {
+  const { data } = await api.get("/purchase/products");
+  return data;
+};
+
+export const updatePurchaseProduct = async (id, product) => {
+  const { data } = await api.put(`/purchase/products/${id}`, product);
+  return data;
+};
+
+export const mergePurchaseProduct = async (id, intoProductId) => {
+  const { data } = await api.post(`/purchase/products/${id}/merge`, { into_product_id: intoProductId });
+  return data;
+};
+
+export const categorizePurchaseProducts = async () => {
+  // Claude can take a while with a long history.
+  const { data } = await api.post("/purchase/products/categorize", null, { timeout: 180000 });
+  return data;
+};
+
+export const dismissPurchaseProductSuggestion = async (id) => {
+  const { data } = await api.post(`/purchase/products/${id}/dismiss-suggestion`);
+  return data;
+};
+
+export const countUnlinkedPurchaseItems = async () => {
+  const { data } = await api.get("/purchase/products/unlinked-items");
+  return data.count;
+};
+
+export const linkPurchaseItemsToProducts = async () => {
+  const { data } = await api.post("/purchase/products/link-items");
+  return data;
+};
+
 export const listPurchaseStores = async () => {
   const { data } = await api.get("/purchase/stores");
   return data;
@@ -127,6 +163,16 @@ export const addListToCart = async (listId, cartId) => {
 
 export const addListItemToCart = async (listId, itemId, cartId, { price, quantity }) => {
   const { data } = await api.post(`/purchase/lists/${listId}/items/${itemId}/add-to-cart/${cartId}`, { price, quantity });
+  return data;
+};
+
+export const getPurchaseAnalytics = async (months = 12) => {
+  const { data } = await api.get(`/purchase/analytics?months=${months}`);
+  return data;
+};
+
+export const getPurchaseProductPrices = async (productId) => {
+  const { data } = await api.get(`/purchase/analytics/products/${productId}/prices`);
   return data;
 };
 
