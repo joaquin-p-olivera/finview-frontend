@@ -134,7 +134,7 @@ function PurchaseDashboardPage() {
           { to: "/purchase/lists", label: "Listas" },
           { to: "/purchase/products", label: "Productos" },
           { to: "/purchase/stores", label: "Supermercados" },
-          { to: "/purchase/stats", label: "Stats" },
+          { to: "/purchase/analysis", label: "Análisis" },
         ]}
         showLogout
       />
