@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.6.0] - 4 Oct 2026
+
 ### Added
 
 - "Análisis" page for purchases (replaces the "Stats" link in the purchase header; the old per-cart totals stay linked from it): spend per category month by month and cart by cart, what went up and down in price since the last purchase, each product's price history by supermarket, your own supermarket inflation (same products compared month to month), where the money goes by product, and which supermarket is cheapest for products bought in more than one. Period of 3, 6 or 12 months, or everything. Needs finview-backend#45. ([#54](https://github.com/joaquin-p-olivera/finview-frontend/pull/54))
