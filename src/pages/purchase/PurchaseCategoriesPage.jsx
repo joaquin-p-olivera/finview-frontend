@@ -130,7 +130,14 @@ function PurchaseCategoriesPage() {
                         style={{ backgroundColor: cat.color || "#6366f1" }}
                       />
                     </td>
-                    <td className="px-4 py-3 font-medium">{cat.name}</td>
+                    <td className="px-4 py-3 font-medium">
+                      {cat.name}
+                      {cat.created_by_ai && (
+                        <span title="Creada por la IA" className="ml-2 rounded bg-indigo-900/50 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-300">
+                          IA
+                        </span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={() => handleDelete(cat.id)}
