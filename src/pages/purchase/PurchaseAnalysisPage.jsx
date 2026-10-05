@@ -178,7 +178,7 @@ function ProductPriceChart({ productId }) {
 
 function PurchaseAnalysisPage() {
   const [analytics, setAnalytics] = useState(null);
-  const [months, setMonths] = useState(12);
+  const [months, setMonths] = useState(3);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productId, setProductId] = useState("");
