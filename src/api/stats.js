@@ -41,7 +41,7 @@ export const getStatementReport = async (statementId) => {
 };
 
 export const getTransactions = async (params = {}) => {
-  const { data } = await api.get("/transactions", { params });
+  const { data } = await api.get("/transactions/", { params });
   return data;
 };
 
