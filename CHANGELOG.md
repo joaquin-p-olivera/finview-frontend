@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Uploading a statement: optional "Contraseña del PDF" field for protected PDFs (like Santander's), the API's error message is shown (wrong password, already uploaded, same bank and period already confirmed) and the parse can take up to 5 minutes. In the review screen each transaction comes with the AI category already selected, and the PDF preview shows the uploaded file from the browser, since Finview no longer stores it. Needs the backend from [finview-backend#49](https://github.com/joaquin-p-olivera/finview-backend/pull/49). ([#64](https://github.com/joaquin-p-olivera/finview-frontend/pull/64))
 - Purchase analysis page (`/purchase/analysis`) now opens with the last 3 months selected instead of 12. ([#65](https://github.com/joaquin-p-olivera/finview-frontend/pull/65))
 
 ## [1.8.0] - 5 Oct 2026
