@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- "Ayuda" page (`/help`, linked from the shared header, also in the phone menu, and from the login page): a short, illustrated intro to Finview with the three steps for card statements, the three steps for supermarket carts, what Finview shows over time, how the cart works without signal and a few tips. ([#57](https://github.com/joaquin-p-olivera/finview-frontend/pull/57))
+
 ## [1.6.0] - 4 Oct 2026
 
 ### Added

@@ -9,6 +9,7 @@ import ReviewPage from "./pages/ReviewPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import ReportsPage from "./pages/ReportsPage";
+import HelpPage from "./pages/HelpPage";
 import PurchaseDashboardPage from "./pages/purchase/PurchaseDashboardPage";
 import PurchaseCartPage from "./pages/purchase/PurchaseCartPage";
 import PurchaseListsPage from "./pages/purchase/PurchaseListsPage";
@@ -49,6 +50,7 @@ function App() {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/help" element={<HelpPage />} />
         <Route
           path="/onboarding"
           element={isAuthenticated ? <OnboardingPage /> : <Navigate to="/login" replace />}
