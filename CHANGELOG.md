@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Purchase analysis page (`/purchase/analysis`) now opens with the last 3 months selected instead of 12. ([#65](https://github.com/joaquin-p-olivera/finview-frontend/pull/65))
+
 ## [1.8.0] - 5 Oct 2026
 
 ### Added
