@@ -7,6 +7,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.8.0] - 5 Oct 2026
+
+### Added
+
+- Landing page: opening Finview without being logged in shows what it is ("Tu plata, bajo la lupa"), how card statements and supermarket carts work, and buttons to create an account or log in, instead of going straight to the login form. The login page's "¿Qué es Finview?" link points to it. ([#60](https://github.com/joaquin-p-olivera/finview-frontend/pull/60))
+
 ## [1.7.0] - 5 Oct 2026
 
 ### Added
