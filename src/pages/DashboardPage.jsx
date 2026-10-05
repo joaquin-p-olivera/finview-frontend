@@ -23,6 +23,7 @@ import {
   getTopMerchants,
   getTrends,
 } from "../api/stats";
+import { listStatements } from "../api/statements";
 import LoadingScreen from "../components/common/LoadingScreen";
 import AppHeader from "../components/common/AppHeader";
 
@@ -52,6 +53,14 @@ function DashboardPage() {
   const [loading, setLoading] = useState(true);
   // Pesos and dollars are never summed together: every chart shows one currency
   const [currency, setCurrency] = useState("UYU");
+  // Statements waiting for review, e.g. the ones that arrived by email
+  const [pendingReview, setPendingReview] = useState([]);
+
+  useEffect(() => {
+    listStatements()
+      .then((all) => setPendingReview(all.filter((s) => s.status === "pending_review")))
+      .catch(() => setPendingReview([]));
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -148,6 +157,22 @@ function DashboardPage() {
       />
 
       <main className="px-6 py-8">
+        {pendingReview.length > 0 && (
+          <div className="mb-6 flex flex-col gap-2 rounded-xl border border-indigo-500/40 bg-indigo-500/10 p-4 text-sm sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-slate-200">
+              {pendingReview.length === 1
+                ? "Tenés un estado de cuenta para revisar"
+                : `Tenés ${pendingReview.length} estados de cuenta para revisar`}
+              {pendingReview[0].bank_name ? ` (${pendingReview[0].bank_name}${pendingReview.length > 1 ? " y otros" : ""})` : ""}.
+            </span>
+            <Link
+              to={`/review/${pendingReview[0].id}`}
+              className="shrink-0 rounded-md bg-indigo-500 px-3 py-1.5 text-center text-xs font-medium text-white hover:bg-indigo-400"
+            >
+              Revisar
+            </Link>
+          </div>
+        )}
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-semibold">Dashboard</h2>
           <div className="flex gap-1 rounded-lg border border-slate-800 p-1 text-xs">

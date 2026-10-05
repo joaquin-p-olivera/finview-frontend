@@ -181,7 +181,8 @@ function FinviewTour({ linked = true, drawings = true }) {
         <ol className="space-y-4">
           <Step icon="file" tone="indigo" title="Subí el PDF">
             El estado de cuenta del banco, tal cual llega. Botón{" "}
-            <PageLink to="/upload">Subir estado</PageLink>.
+            <PageLink to="/upload">Subir estado</PageLink>, o reenviá el mail del banco a tu
+            dirección de Finview (<PageLink to="/email-import">Importar por mail</PageLink>).
           </Step>
           <Step icon="sparkles" tone="pink" title="La IA lo lee, vos le das el OK">
             Saca cada gasto y le pone categoría. Corregís lo que quieras y confirmás.

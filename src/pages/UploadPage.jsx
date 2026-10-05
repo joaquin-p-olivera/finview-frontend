@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { uploadStatement, getStatementStatus } from "../api/statements";
 import { getErrorMessage } from "../api/client";
 
@@ -113,6 +113,13 @@ function UploadPage() {
             </button>
           </div>
         </div>
+        <p className="text-center text-sm text-slate-400">
+          ¿Te llega por mail?{" "}
+          <Link to="/email-import" className="font-medium text-indigo-400 hover:text-indigo-300">
+            Reenvialo a Finview
+          </Link>{" "}
+          y no tenés que bajar el PDF.
+        </p>
       </main>
     </div>
   );
