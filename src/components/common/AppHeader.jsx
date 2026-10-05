@@ -5,7 +5,10 @@ import Logo from "./Logo";
 
 // Top bar shared by the main pages. On desktop it's the usual row of links;
 // on phones the links, user and logout move into a menu so nothing overflows,
-// and "Subir estado" stays visible next to the menu button.
+// and "Subir estado" stays visible next to the menu button. "Ayuda" is on
+// every page, last among the links.
+const HELP_LINK = { to: "/help", label: "Ayuda" };
+
 function AppHeader({ links = [], showUpload = false, showUser = false, showLogout = false }) {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
@@ -21,6 +24,7 @@ function AppHeader({ links = [], showUpload = false, showUser = false, showLogou
   }, [menuOpen]);
 
   const username = user ? `${user.username}` : "Sesión iniciada";
+  const navLinks = [...links.filter((link) => link.to !== HELP_LINK.to), HELP_LINK];
 
   return (
     <header className="relative z-30 border-b border-slate-800 bg-slate-950">
@@ -30,7 +34,7 @@ function AppHeader({ links = [], showUpload = false, showUser = false, showLogou
         </Link>
 
         <div className="hidden items-center gap-3 text-sm md:flex">
-          {links.map((link) => (
+          {navLinks.map((link) => (
             <Link key={link.to} to={link.to} className="text-slate-400 hover:text-white">
               {link.label}
             </Link>
@@ -108,7 +112,7 @@ function AppHeader({ links = [], showUpload = false, showUser = false, showLogou
             aria-label="Menú principal"
             className="absolute inset-x-0 top-full flex flex-col border-b border-slate-800 bg-slate-900 px-4 pt-2 pb-4 md:hidden"
           >
-            {links.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
