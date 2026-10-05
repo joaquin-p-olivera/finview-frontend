@@ -1,8 +1,10 @@
 import api from "./client";
 
-export const uploadStatement = async (file) => {
+// The PDF is only read in memory by the API (parsed with Claude, never stored).
+export const uploadStatement = async (file, password) => {
   const form = new FormData();
   form.append("file", file);
+  if (password) form.append("password", password);
   const { data } = await api.post("/statements/", form);
   return data;
 };

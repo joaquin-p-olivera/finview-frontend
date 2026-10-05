@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { uploadStatement, getStatementStatus } from "../api/statements";
+import { getErrorMessage } from "../api/client";
 
 function UploadPage() {
   const [file, setFile] = useState(null);
+  const [password, setPassword] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ function UploadPage() {
 
   const pollStatus = async (id) => {
     let attempts = 0;
-    const maxAttempts = 60; // 2 minutos aprox si llamamos cada 2s
+    const maxAttempts = 150; // 5 minutos aprox si llamamos cada 2s (un PDF largo puede tardar)
 
     const interval = setInterval(async () => {
       attempts += 1;
@@ -30,7 +32,7 @@ function UploadPage() {
         if (status.status === "pending_review") {
           clearInterval(interval);
           setIsUploading(false);
-          navigate(`/review/${id}`, { replace: true });
+          navigate(`/review/${id}`, { replace: true, state: { file } });
         } else if (status.status === "error") {
           clearInterval(interval);
           setIsUploading(false);
@@ -57,12 +59,12 @@ function UploadPage() {
     setIsUploading(true);
     setError("");
     try {
-      const stmt = await uploadStatement(file);
+      const stmt = await uploadStatement(file, password);
       await pollStatus(stmt.id);
     } catch (err) {
       console.error(err);
       setIsUploading(false);
-      setError("No se pudo subir el archivo. Verificá el tamaño y el formato.");
+      setError(getErrorMessage(err, "No se pudo subir el archivo. Verificá el tamaño y el formato."));
     }
   };
 
@@ -73,6 +75,7 @@ function UploadPage() {
           <h1 className="text-2xl font-semibold">Subir estado de cuenta</h1>
           <p className="mt-1 text-sm text-slate-400">
             Arrastrá un PDF de tu banco o selecciónalo para que Finview lo analice con IA.
+            El PDF no se guarda: se usa solo para leer las transacciones.
           </p>
         </div>
         <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 p-8">
@@ -88,6 +91,17 @@ function UploadPage() {
                 Archivo seleccionado: <span className="font-medium">{file.name}</span>
               </p>
             )}
+            <label className="flex w-full max-w-xs flex-col gap-1 text-left text-xs text-slate-400">
+              Contraseña del PDF (solo si tiene)
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="off"
+                placeholder="Ej. tu cédula, para Santander"
+                className="rounded-md border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100"
+              />
+            </label>
             {error && <p className="text-xs text-red-400">{error}</p>}
             <button
               type="button"

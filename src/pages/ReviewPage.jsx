@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getStatementDetail, confirmStatement, deleteStatement } from "../api/statements";
 import { listCategories } from "../api/categories";
 import ReviewTable from "../components/review/ReviewTable";
@@ -8,6 +8,8 @@ import PdfViewer from "../components/review/PdfViewer";
 function ReviewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  // the uploaded PDF, passed along by UploadPage (the API doesn't store it)
+  const pdfFile = useLocation().state?.file ?? null;
   const [statement, setStatement] = useState(null);
   const [rows, setRows] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -143,7 +145,7 @@ function ReviewPage() {
             />
           </div>
           <div className="h-[70vh]">
-            <PdfViewer statementId={id} />
+            <PdfViewer file={pdfFile} />
           </div>
         </div>
       </main>
