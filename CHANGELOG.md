@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- "Transacciones" page showed no transactions: it called `/transactions` without the trailing slash, the API answers that with a redirect to `/transactions/`, which behind Render's proxy points to plain `http` and the browser blocks from the `https` site. It now calls `/transactions/` directly. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- "Transacciones" page showed no transactions: it called `/transactions` without the trailing slash, the API answers that with a redirect to `/transactions/`, which behind Render's proxy points to plain `http` and the browser blocks from the `https` site. It now calls `/transactions/` directly. ([#66](https://github.com/joaquin-p-olivera/finview-frontend/pull/66))
 
 ## [1.8.0] - 5 Oct 2026
 
