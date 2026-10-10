@@ -180,7 +180,7 @@ function EmailImportPage() {
               <ol className="mt-3 list-decimal space-y-2 pl-5">
                 <li>
                   <span className="text-slate-100">Una vez:</span> reenviá el mail del banco a tu
-                  dirección. Lo revisamos cada hora, así que puede tardar un poco en aparecer abajo.
+                  dirección. Lo revisamos cada 10 minutos, así que puede tardar un poco en aparecer abajo.
                 </li>
                 <li>
                   <span className="text-slate-100">Automático con Gmail:</span> en Configuración →
