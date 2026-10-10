@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- "Subir estado" highlights importing by email: below the upload box, a card with an icon, a short explanation and an "Importar por mail" button replaces the small text link. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+
 ### Added
 
 - "Importar por mail" page (`/email-import`, linked from the upload page and the help): shows the user's Finview forwarding address with a copy button, Gmail's forwarding confirmation code and link when it arrives, how to set up a Gmail filter, and the latest forwarded statements with their state (to review, confirmed, already imported, or the error, like a password-protected PDF) and a "Revisar" button. The address can be changed. The dashboard shows a notice when a statement is waiting for review. Needs the backend from [finview-backend#51](https://github.com/joaquin-p-olivera/finview-backend/pull/51). ([#67](https://github.com/joaquin-p-olivera/finview-frontend/pull/67))
