@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- "Importar por mail" page (`/email-import`, linked from the upload page and the help): shows the user's Finview forwarding address with a copy button, Gmail's forwarding confirmation code and link when it arrives, how to set up a Gmail filter, and the latest forwarded statements with their state (to review, confirmed, already imported, or the error, like a password-protected PDF) and a "Revisar" button. The address can be changed. The dashboard shows a notice when a statement is waiting for review. Needs the backend from [finview-backend#51](https://github.com/joaquin-p-olivera/finview-backend/pull/51). ([#67](https://github.com/joaquin-p-olivera/finview-frontend/pull/67))
+
 ### Changed
 
 - Uploading a statement: optional "Contraseña del PDF" field for protected PDFs (like Santander's), the API's error message is shown (wrong password, already uploaded, same bank and period already confirmed) and the parse can take up to 5 minutes. In the review screen each transaction comes with the AI category already selected, and the PDF preview shows the uploaded file from the browser, since Finview no longer stores it. Needs the backend from [finview-backend#49](https://github.com/joaquin-p-olivera/finview-backend/pull/49). ([#64](https://github.com/joaquin-p-olivera/finview-frontend/pull/64))
