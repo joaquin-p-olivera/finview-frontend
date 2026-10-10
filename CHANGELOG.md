@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- "Subir estado" highlights importing by email: below the upload box, a card with an icon, a short explanation and an "Importar por mail" button replaces the small text link. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- "Subir estado" highlights importing by email: below the upload box, a card with an icon, a short explanation and an "Importar por mail" button replaces the small text link. ([#70](https://github.com/joaquin-p-olivera/finview-frontend/pull/70))
 
 ## [1.9.0] - 10 Oct 2026
 
