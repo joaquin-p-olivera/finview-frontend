@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Importar por mail: section "PDFs con contraseña" to save, replace and delete the password of each bank's protected statements (Santander uses the holder's ID number), so they can be imported by email. Passwords are sent to the backend, which stores them encrypted, and are never shown again. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/73))
+
 ## [1.9.1] - 10 Oct 2026
 
 ### Fixed
