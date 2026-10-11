@@ -9,9 +9,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- "Revisar parseo": totals per currency (pesos and dollars) above the table, one card each with the number of transactions. They follow what you edit or delete in the table before confirming. ([#77](https://github.com/joaquin-p-olivera/finview-frontend/pull/77))
 - Importar por mail: eye button in the password field of "PDFs con contraseña" to show or hide what you type. ([#75](https://github.com/joaquin-p-olivera/finview-frontend/pull/75))
 - Importar por mail: closing text that says whether you get an email when a statement arrives (on by default) and a link to turn it on or off, with a modal that confirms the change or shows the error. Needs the backend with `PUT /api/v1/email-import/notifications`. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/74))
 - Importar por mail: section "PDFs con contraseña" to save, replace and delete the password of each bank's protected statements (Santander uses the holder's ID number), so they can be imported by email. Passwords are sent to the backend, which stores them encrypted, and are never shown again. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/73))
+
+### Changed
+
+- "Revisar parseo": the "Tarjeta" datum is gone from the header, since most statements don't carry it. When there is no PDF to show (statements that arrive by email, or after reloading the page) the table uses the full width and "Finview no guarda el PDF…" becomes a small notice above it instead of an empty panel; with a PDF uploaded from the device it still shows beside the table. ([#77](https://github.com/joaquin-p-olivera/finview-frontend/pull/77))
 
 ### Fixed
 
