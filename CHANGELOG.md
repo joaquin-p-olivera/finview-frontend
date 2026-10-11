@@ -14,7 +14,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Importar por mail: the browser no longer fills the bank name and password fields of "PDFs con contraseña" with your Finview login (the password field is marked `new-password`, which Chrome and Safari respect, unlike `off`). ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- Importar por mail: the browser no longer fills the bank name and password fields of "PDFs con contraseña" with your Finview login (the password field is marked `new-password`, which Chrome and Safari respect, unlike `off`). ([#75](https://github.com/joaquin-p-olivera/finview-frontend/pull/75))
 
 ## [1.9.1] - 10 Oct 2026
 
