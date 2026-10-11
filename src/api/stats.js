@@ -48,3 +48,13 @@ export const getTransactions = async (params = {}) => {
 export const deleteTransaction = async (id) => {
   await api.delete(`/transactions/${id}`);
 };
+
+// Spend per category month by month: { months: ["2026-08", ...], categories:
+// [{ category, totals: [per month], total }], totals: [per month] }.
+// bank (a name from getByBank) and currency are optional filters.
+export const getCategoryTrends = async (months = 6, currency, bank) => {
+  const { data } = await api.get("/stats/category-trends", {
+    params: { months, currency, bank: bank || undefined },
+  });
+  return data;
+};

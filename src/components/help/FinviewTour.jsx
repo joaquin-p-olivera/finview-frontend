@@ -189,8 +189,9 @@ function FinviewTour({ linked = true, drawings = true }) {
           </Step>
           <Step icon="chart" tone="emerald" title="Mirá a dónde fue todo">
             En el <PageLink to="/dashboard">Dashboard</PageLink> y en{" "}
-            <PageLink to="/reports">Reportes</PageLink>: por categoría, mes, banco y comercio. Pesos
-            y dólares, cada uno por su lado.
+            <PageLink to="/reports">Reportes</PageLink>: por categoría, mes, banco y comercio. En{" "}
+            <PageLink to="/evolution">Evolución</PageLink> ves cómo cambia cada categoría mes a mes.
+            Pesos y dólares, cada uno por su lado.
           </Step>
         </ol>
       </Card>

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AppHeader from "../components/common/AppHeader";
 import LoadingScreen from "../components/common/LoadingScreen";
+import BankPasswords from "../components/emailImport/BankPasswords";
+import NotificationsNotice from "../components/emailImport/NotificationsNotice";
 import { getEmailImport, regenerateEmailImportAddress } from "../api/emailImport";
 import { getErrorMessage } from "../api/client";
 
@@ -92,6 +94,7 @@ function EmailImportPage() {
         links={[
           { to: "/dashboard", label: "Dashboard" },
           { to: "/reports", label: "Reportes" },
+          { to: "/evolution", label: "Evolución" },
         ]}
         showUpload
         showLogout
@@ -192,14 +195,9 @@ function EmailImportPage() {
                   Cuando llegue, revisalo y confirmalo como cualquier estado de cuenta que subís.
                 </li>
               </ol>
-              <p className="mt-3 text-xs text-slate-500">
-                Si el PDF tiene contraseña (como el de Santander), no se puede leer por mail:{" "}
-                <Link to="/upload" className="text-indigo-400 hover:text-indigo-300">
-                  subilo desde acá
-                </Link>{" "}
-                con la contraseña.
-              </p>
             </section>
+
+            <BankPasswords />
 
             <section>
               <div className="mb-3 flex items-center justify-between">
@@ -249,6 +247,8 @@ function EmailImportPage() {
                 </ul>
               )}
             </section>
+
+            <NotificationsNotice enabled={data.notifications !== false} onChange={setData} />
           </>
         )}
       </main>

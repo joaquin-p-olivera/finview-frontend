@@ -4,6 +4,7 @@ import { getStatementDetail, confirmStatement, deleteStatement } from "../api/st
 import { listCategories } from "../api/categories";
 import ReviewTable from "../components/review/ReviewTable";
 import PdfViewer from "../components/review/PdfViewer";
+import ReviewTotals from "../components/review/ReviewTotals";
 
 function ReviewPage() {
   const { id } = useParams();
@@ -110,8 +111,7 @@ function ReviewPage() {
             <h1 className="text-xl font-semibold">Revisar parseo</h1>
             <p className="mt-1 text-xs text-slate-400">
               Banco: {statement.bank_name || "—"} · Período:{" "}
-              {statement.period_start || "?"} – {statement.period_end || "?"} · Tarjeta:{" "}
-              {statement.card_last4 ? `***${statement.card_last4}` : "—"}
+              {statement.period_start || "?"} – {statement.period_end || "?"}
             </p>
           </div>
           <div className="flex gap-2">
@@ -135,19 +135,35 @@ function ReviewPage() {
 
         {error && <p className="text-xs text-red-400">{error}</p>}
 
-        <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] md:items-stretch">
-          <div className="h-[70vh]">
-            <ReviewTable
-              rows={rows}
-              categories={categories}
-              onChangeRow={handleChangeRow}
-              onDeleteRow={handleDeleteRow}
-            />
+        <ReviewTotals rows={rows} />
+
+        {pdfFile ? (
+          <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] md:items-stretch">
+            <div className="h-[70vh]">
+              <ReviewTable
+                rows={rows}
+                categories={categories}
+                onChangeRow={handleChangeRow}
+                onDeleteRow={handleDeleteRow}
+              />
+            </div>
+            <div className="h-[70vh]">
+              <PdfViewer file={pdfFile} />
+            </div>
           </div>
-          <div className="h-[70vh]">
-            <PdfViewer file={pdfFile} />
-          </div>
-        </div>
+        ) : (
+          <>
+            <PdfViewer file={null} />
+            <div className="max-h-[70vh] overflow-auto rounded-xl">
+              <ReviewTable
+                rows={rows}
+                categories={categories}
+                onChangeRow={handleChangeRow}
+                onDeleteRow={handleDeleteRow}
+              />
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
