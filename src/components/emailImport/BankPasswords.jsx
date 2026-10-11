@@ -5,12 +5,34 @@ import { getErrorMessage } from "../../api/client";
 const inputClass =
   "w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none";
 
+// Eye icons (outline, 24x24) for the show/hide password button.
+function EyeIcon({ crossed }) {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+      {crossed && <path d="M4 4l16 16" />}
+    </svg>
+  );
+}
+
 // Saved PDF passwords per bank, so the email import can open protected
 // statements (Santander uses the holder's ID number).
 function BankPasswords() {
   const [items, setItems] = useState([]);
   const [bankName, setBankName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -34,6 +56,7 @@ function BankPasswords() {
       await saveBankPassword({ bank_name: bankName.trim(), password });
       setBankName("");
       setPassword("");
+      setShowPassword(false);
       await load();
     } catch (err) {
       setError(getErrorMessage(err, "No se pudo guardar la contraseña."));
@@ -90,17 +113,28 @@ function BankPasswords() {
           maxLength={100}
           required
         />
-        <input
-          className={inputClass}
-          type="password"
-          name="bank-pdf-password"
-          autoComplete="new-password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          maxLength={200}
-          required
-        />
+        <div className="relative w-full">
+          <input
+            className={`${inputClass} pr-10`}
+            type={showPassword ? "text" : "password"}
+            name="bank-pdf-password"
+            autoComplete="new-password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            maxLength={200}
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            aria-pressed={showPassword}
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-100"
+          >
+            <EyeIcon crossed={showPassword} />
+          </button>
+        </div>
         <button
           type="submit"
           disabled={saving || !bankName.trim() || !password}
