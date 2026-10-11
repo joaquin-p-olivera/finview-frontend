@@ -149,6 +149,7 @@ function DashboardPage() {
         links={[
           { to: "/transactions", label: "Transacciones" },
           { to: "/reports", label: "Reportes" },
+          { to: "/evolution", label: "Evolución" },
           { to: "/purchase", label: "Compras" },
         ]}
         showUpload

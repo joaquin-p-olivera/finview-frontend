@@ -94,6 +94,7 @@ function EmailImportPage() {
         links={[
           { to: "/dashboard", label: "Dashboard" },
           { to: "/reports", label: "Reportes" },
+          { to: "/evolution", label: "Evolución" },
         ]}
         showUpload
         showLogout

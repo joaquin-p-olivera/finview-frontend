@@ -10,6 +10,7 @@ import EmailImportPage from "./pages/EmailImportPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import ReportsPage from "./pages/ReportsPage";
+import EvolutionPage from "./pages/EvolutionPage";
 import HelpPage from "./pages/HelpPage";
 import LandingPage from "./pages/LandingPage";
 import PurchaseDashboardPage from "./pages/purchase/PurchaseDashboardPage";
@@ -72,6 +73,10 @@ function App() {
         <Route
           path="/reports"
           element={isAuthenticated ? <ReportsPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/evolution"
+          element={isAuthenticated ? <EvolutionPage /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/upload"
