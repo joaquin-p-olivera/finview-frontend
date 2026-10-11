@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { getByBank, getCategoryTrends } from "../api/stats";
 import AppHeader from "../components/common/AppHeader";
 import LoadingScreen from "../components/common/LoadingScreen";
@@ -31,7 +31,9 @@ const monthLabel = (key) => {
 const formatMoney = (value, currency) =>
   new Intl.NumberFormat("es-UY", { style: "currency", currency, maximumFractionDigits: 0 }).format(value);
 
-const formatAxis = (value) => (Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : `${value}`);
+// 2500 -> "2,5k" (rounding to whole thousands repeats ticks on small ranges)
+const formatAxis = (value) =>
+  Math.abs(value) >= 1000 ? `${String(+(value / 1000).toFixed(1)).replace(".", ",")}k` : `${value}`;
 
 function Segmented({ options, value, onChange, label }) {
   return (
@@ -61,6 +63,8 @@ function EvolutionPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  // one category at a time on the chart, picked by clicking it
+  const [picked, setPicked] = useState("");
 
   useEffect(() => {
     getByBank("all")
@@ -100,16 +104,11 @@ function EvolutionPage() {
     return colors;
   }, [categories]);
 
+  // the picked category, or the biggest one when it isn't in the current data
+  const selected = categories.find((c) => c.category === picked) ?? categories[0];
   const chartData = useMemo(
-    () =>
-      (data?.months ?? []).map((key, index) => {
-        const row = { month: monthLabel(key) };
-        categories.forEach((c) => {
-          row[c.category] = c.totals[index];
-        });
-        return row;
-      }),
-    [data, categories]
+    () => (data?.months ?? []).map((key, index) => ({ month: monthLabel(key), value: selected?.totals[index] ?? 0 })),
+    [data, selected]
   );
 
   if (loading) {
@@ -152,7 +151,7 @@ function EvolutionPage() {
         </div>
 
         <p className="mb-6 text-sm text-slate-400">
-          Cuánto gastaste en cada categoría, mes a mes{bank ? ` con ${bank}` : ""}.
+          Cuánto gastaste en cada categoría, mes a mes{bank ? ` con ${bank}` : ""}. Tocá una categoría para ver su curva.
         </p>
 
         {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
@@ -171,22 +170,49 @@ function EvolutionPage() {
         {hasData && (
           <>
             <section className="mb-6 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+              <div role="group" aria-label="Categoría" className="mb-5 flex flex-wrap gap-2">
+                {categories.map((c) => {
+                  const active = c.category === selected.category;
+                  return (
+                    <button
+                      key={c.category}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setPicked(c.category)}
+                      className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs ${
+                        active
+                          ? "border-slate-500 bg-slate-800 text-white"
+                          : "border-slate-800 text-slate-400 hover:border-slate-600 hover:text-white"
+                      }`}
+                    >
+                      <span
+                        className="inline-block h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: colorOf[c.category] }}
+                      />
+                      {c.category}
+                    </button>
+                  );
+                })}
+              </div>
               <div className="h-80">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData}>
+                  <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                     <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
                     <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={formatAxis} />
                     <Tooltip
                       contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
-                      formatter={(value, name) => [formatMoney(value, currency), name]}
-                      itemSorter={(item) => -item.value}
+                      formatter={(value) => [formatMoney(value, currency), selected.category]}
                     />
-                    <Legend wrapperStyle={{ fontSize: "12px" }} />
-                    {[...categories].reverse().map((c) => (
-                      <Bar key={c.category} dataKey={c.category} stackId="spend" fill={colorOf[c.category]} />
-                    ))}
-                  </BarChart>
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke={colorOf[selected.category]}
+                      strokeWidth={3}
+                      dot={{ r: 4, strokeWidth: 2, fill: "#0f172a" }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
                 </ResponsiveContainer>
               </div>
             </section>
@@ -206,10 +232,16 @@ function EvolutionPage() {
                 </thead>
                 <tbody>
                   {categories.map((c) => (
-                    <tr key={c.category} className="border-b border-slate-800/60">
+                    <tr
+                      key={c.category}
+                      onClick={() => setPicked(c.category)}
+                      className={`cursor-pointer border-b border-slate-800/60 hover:bg-slate-800/40 ${
+                        c.category === selected.category ? "bg-slate-800/60" : ""
+                      }`}
+                    >
                       <td className="py-2 pr-4">
                         <span
-                          className="mr-2 inline-block h-2.5 w-2.5 rounded-sm"
+                          className="mr-2 inline-block h-2.5 w-2.5 rounded-full"
                           style={{ backgroundColor: colorOf[c.category] }}
                         />
                         {c.category}
