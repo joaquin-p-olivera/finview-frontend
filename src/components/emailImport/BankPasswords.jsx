@@ -82,6 +82,8 @@ function BankPasswords() {
       <form onSubmit={submit} className="mt-4 flex flex-col gap-2 sm:flex-row">
         <input
           className={inputClass}
+          name="bank-name"
+          autoComplete="off"
           placeholder="Banco (ej. Santander)"
           value={bankName}
           onChange={(e) => setBankName(e.target.value)}
@@ -91,7 +93,8 @@ function BankPasswords() {
         <input
           className={inputClass}
           type="password"
-          autoComplete="off"
+          name="bank-pdf-password"
+          autoComplete="new-password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
