@@ -27,3 +27,10 @@ export const saveBankPassword = async ({ bank_name, password }) => {
 export const deleteBankPassword = async (id) => {
   await api.delete(`/email-import/pdf-passwords/${id}`);
 };
+
+// Turn the "statement arrived" notice email on or off. Returns the same data as
+// getEmailImport, with the saved `notifications` value.
+export const setEmailImportNotifications = async (enabled) => {
+  const { data } = await api.put("/email-import/notifications", { enabled });
+  return data;
+};

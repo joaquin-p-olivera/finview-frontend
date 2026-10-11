@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Importar por mail: closing text that says whether you get an email when a statement arrives (on by default) and a link to turn it on or off, with a modal that confirms the change or shows the error. Needs the backend with `PUT /api/v1/email-import/notifications`. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
 - Importar por mail: section "PDFs con contraseña" to save, replace and delete the password of each bank's protected statements (Santander uses the holder's ID number), so they can be imported by email. Passwords are sent to the backend, which stores them encrypted, and are never shown again. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/73))
 
 ## [1.9.1] - 10 Oct 2026

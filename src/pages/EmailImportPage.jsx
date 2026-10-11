@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AppHeader from "../components/common/AppHeader";
 import LoadingScreen from "../components/common/LoadingScreen";
 import BankPasswords from "../components/emailImport/BankPasswords";
+import NotificationsNotice from "../components/emailImport/NotificationsNotice";
 import { getEmailImport, regenerateEmailImportAddress } from "../api/emailImport";
 import { getErrorMessage } from "../api/client";
 
@@ -245,6 +246,8 @@ function EmailImportPage() {
                 </ul>
               )}
             </section>
+
+            <NotificationsNotice enabled={data.notifications !== false} onChange={setData} />
           </>
         )}
       </main>
