@@ -9,8 +9,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Importar por mail: eye button in the password field of "PDFs con contraseña" to show or hide what you type. ([#75](https://github.com/joaquin-p-olivera/finview-frontend/pull/75))
 - Importar por mail: closing text that says whether you get an email when a statement arrives (on by default) and a link to turn it on or off, with a modal that confirms the change or shows the error. Needs the backend with `PUT /api/v1/email-import/notifications`. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/74))
 - Importar por mail: section "PDFs con contraseña" to save, replace and delete the password of each bank's protected statements (Santander uses the holder's ID number), so they can be imported by email. Passwords are sent to the backend, which stores them encrypted, and are never shown again. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/73))
+
+### Fixed
+
+- Importar por mail: the browser no longer fills the bank name and password fields of "PDFs con contraseña" with your Finview login (the password field is marked `new-password`, which Chrome and Safari respect, unlike `off`). ([#75](https://github.com/joaquin-p-olivera/finview-frontend/pull/75))
 
 ## [1.9.1] - 10 Oct 2026
 
