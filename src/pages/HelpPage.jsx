@@ -17,6 +17,7 @@ function HelpPage() {
           links={[
             { to: "/dashboard", label: "Dashboard" },
             { to: "/reports", label: "Reportes" },
+            { to: "/evolution", label: "Evolución" },
             { to: "/purchase", label: "Compras" },
           ]}
           showUpload

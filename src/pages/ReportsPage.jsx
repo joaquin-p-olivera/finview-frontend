@@ -175,6 +175,7 @@ function ReportsPage() {
         links={[
           { to: "/dashboard", label: "Dashboard" },
           { to: "/transactions", label: "Transacciones" },
+          { to: "/evolution", label: "Evolución" },
         ]}
         showUpload
       />

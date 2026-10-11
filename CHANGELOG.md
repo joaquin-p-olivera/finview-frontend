@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- "Evolución" page (`/evolution`, linked from the header and the help): spend per category month by month as stacked bars plus a category-by-month table with totals, for the last 3, 6 or 12 months, in pesos or dollars, for all banks or one bank. Needs the backend with `GET /api/v1/stats/category-trends` ([finview-backend#63](https://github.com/joaquin-p-olivera/finview-backend/pull/63)). ([#78](https://github.com/joaquin-p-olivera/finview-frontend/pull/78))
 - "Revisar parseo": totals per currency (pesos and dollars) above the table, one card each with the number of transactions. They follow what you edit or delete in the table before confirming. ([#77](https://github.com/joaquin-p-olivera/finview-frontend/pull/77))
 - Importar por mail: eye button in the password field of "PDFs con contraseña" to show or hide what you type. ([#75](https://github.com/joaquin-p-olivera/finview-frontend/pull/75))
 - Importar por mail: closing text that says whether you get an email when a statement arrives (on by default) and a link to turn it on or off, with a modal that confirms the change or shows the error. Needs the backend with `PUT /api/v1/email-import/notifications`. ([#74](https://github.com/joaquin-p-olivera/finview-frontend/pull/74))
