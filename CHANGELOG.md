@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.10.0] - 11 Oct 2026
+
 ### Added
 
 - "Evolución" page (`/evolution`, linked from the header and the help): spend per category month by month as a smooth line with dots, one category at a time (pick it from the chips or by clicking its row; the biggest one is shown first), plus a category-by-month table with totals, for the last 3, 6 or 12 months, in pesos or dollars, for all banks or one bank. Needs the backend with `GET /api/v1/stats/category-trends` ([finview-backend#63](https://github.com/joaquin-p-olivera/finview-backend/pull/63)). ([#78](https://github.com/joaquin-p-olivera/finview-frontend/pull/78))
