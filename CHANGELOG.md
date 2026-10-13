@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Privacy page at `/privacidad` (public, linked from the landing and help pages): what Finview stores and what it doesn't (statement PDFs and forwarded emails are discarded), who data is shared with (Anthropic, Google, Render, Netlify, Resend) and how to ask for an account to be deleted. It is the privacy policy link of the Google sign-in consent screen. ([#PR](https://github.com/joaquin-p-olivera/finview-frontend/pull/PR))
+- Privacy page at `/privacidad` (public, linked from the landing and help pages): what Finview stores and what it doesn't (statement PDFs and forwarded emails are discarded), who data is shared with (Anthropic, Google, Render, Netlify, Resend) and how to ask for an account to be deleted. It is the privacy policy link of the Google sign-in consent screen. ([#83](https://github.com/joaquin-p-olivera/finview-frontend/pull/83))
 
 ## [1.10.0] - 11 Oct 2026
 
