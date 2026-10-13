@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRequest, loginRequest, fetchMe } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import GoogleSignIn from "../components/auth/GoogleSignIn";
 
 const schema = z
   .object({
@@ -55,6 +56,7 @@ function RegisterPage() {
         <p className="mb-6 text-sm text-slate-400">
           Configurá Finview para empezar a analizar tus gastos.
         </p>
+        <GoogleSignIn />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-200">Email</label>
