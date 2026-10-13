@@ -92,6 +92,10 @@ function LoginPage() {
           <Link to="/" className="hover:text-slate-200">
             ¿Qué es Finview?
           </Link>
+          <span className="mx-2 text-slate-600">·</span>
+          <Link to="/privacidad" className="hover:text-slate-200">
+            Privacidad
+          </Link>
         </p>
       </div>
     </div>
