@@ -122,6 +122,13 @@ function RegisterPage() {
             Iniciar sesión
           </Link>
         </p>
+        <p className="mt-2 text-center text-xs text-slate-500">
+          Al crear tu cuenta aceptás la{" "}
+          <Link to="/privacidad" className="text-slate-400 underline hover:text-slate-200">
+            política de privacidad
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );

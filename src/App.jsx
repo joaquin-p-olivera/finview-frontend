@@ -13,6 +13,7 @@ import ReportsPage from "./pages/ReportsPage";
 import EvolutionPage from "./pages/EvolutionPage";
 import HelpPage from "./pages/HelpPage";
 import LandingPage from "./pages/LandingPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import PurchaseDashboardPage from "./pages/purchase/PurchaseDashboardPage";
 import PurchaseCartPage from "./pages/purchase/PurchaseCartPage";
 import PurchaseListsPage from "./pages/purchase/PurchaseListsPage";
@@ -54,6 +55,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/privacidad" element={<PrivacyPage />} />
         <Route
           path="/onboarding"
           element={isAuthenticated ? <OnboardingPage /> : <Navigate to="/login" replace />}

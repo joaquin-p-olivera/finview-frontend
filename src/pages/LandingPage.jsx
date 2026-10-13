@@ -83,6 +83,11 @@ function LandingPage() {
           <CallToAction />
         </section>
       </main>
+      <footer className="pb-8 text-center text-xs text-slate-500">
+        <Link to="/privacidad" className="hover:text-slate-300">
+          Privacidad
+        </Link>
+      </footer>
     </div>
   );
 }
