@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- "Continuar con Google" on the login and register pages (Google Identity Services, loaded only there): signs in, links an existing account with the same Gmail, or creates the account and goes to the onboarding. Shown only when `VITE_GOOGLE_CLIENT_ID` is set (repository variable read by the deploy workflow); needs the backend `POST /api/v1/auth/google`. ([#82](https://github.com/joaquin-p-olivera/finview-frontend/pull/82))
+
 ## [1.10.0] - 11 Oct 2026
 
 ### Added
