@@ -82,6 +82,8 @@ jobs:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           # Optional: without it the "Continuar con Google" button is hidden
           VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          # Optional: contact email on the privacy page
+          VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL }}
         run: npm run build
 
       # Publishes the prebuilt dist/ as the production deploy; redirects come

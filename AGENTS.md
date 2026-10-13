@@ -26,6 +26,7 @@ npm run build
 |----------|-------------|----------|
 | `VITE_API_BASE_URL` | Backend API URL (e.g., `http://localhost:8000/api/v1`) | Yes |
 | `VITE_GOOGLE_CLIENT_ID` | Same OAuth client ID as the backend `GOOGLE_CLIENT_ID`; shows "Continuar con Google" on login and register. In production it comes from the repository variable of the same name in the deploy workflow | No |
+| `VITE_CONTACT_EMAIL` | Contact email shown on the privacy page (`/privacidad`); without it the contact box is hidden. In production it comes from the repository variable of the same name | No |
 
 ### Environment Files
 
