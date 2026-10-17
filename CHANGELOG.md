@@ -14,7 +14,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Cart: leaving the price empty when adding a product you already bought uses its last price (the "Último: …" shown as placeholder). Without a last price the price is still required. (PRLINK)
+- Cart: leaving the price empty when adding a product you already bought uses its last price (the "Último: …" shown as placeholder). Without a last price the price is still required. ([#84](https://github.com/joaquin-p-olivera/finview-frontend/pull/84))
 
 ## [1.10.0] - 11 Oct 2026
 
