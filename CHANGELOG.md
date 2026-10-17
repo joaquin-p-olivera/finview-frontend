@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.11.0] - 17 Oct 2026
+
 ### Added
 
 - "Preguntale a tus compras" on the purchase analysis page (`/purchase/analysis`): type a question in plain language (or tap one of the examples) and get an answer from your completed carts with a short text and, when it helps, a table. Shows how many questions are left today and, under "Preguntas anteriores", the earlier ones (the last 10 in total) behind a Mostrar / Ocultar button that remembers its state; hidden when the backend has no Claude key. Needs the backend with `GET/POST /api/v1/purchase/ask` ([finview-backend#71](https://github.com/joaquin-p-olivera/finview-backend/pull/71)). ([#85](https://github.com/joaquin-p-olivera/finview-frontend/pull/85))
