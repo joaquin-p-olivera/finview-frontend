@@ -77,6 +77,7 @@ UI layer for the purchase module. Corresponds to backend's `purchase_` endpoints
 | List Detail | `/purchase/lists/:id` | Items in a list |
 | Categories | `/purchase/categories` | Manage categories |
 | Stats | `/purchase/stats` | Statistics and charts |
+| Analysis | `/purchase/analysis` | Spending by category, price changes, inflation and cheapest stores (`GET /purchase/analytics`), with the "Preguntale a tus compras" box on top (`components/purchase/PurchaseAskCard.jsx`, `GET/POST /purchase/ask`) |
 
 ### Business Logic (shared with Backend)
 

@@ -55,6 +55,9 @@ const shouldRetry = (error) => {
   if ((config.__retryCount || 0) >= MAX_RETRIES) return false;
   if (config.method !== "get" && !config.__idempotencyKey) return false;
   const status = response?.status;
+  // Requests that set noGatewayRetry answer 502/503 themselves (e.g. Claude
+  // failed): repeating them only costs another try with the same result.
+  if (response && config.noGatewayRetry) return false;
   return !response || status === 502 || status === 503 || status === 504;
 };
 
