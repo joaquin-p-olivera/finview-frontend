@@ -86,7 +86,7 @@ function PurchaseAskCard() {
     <section className="mb-6 rounded-xl border border-indigo-900/60 bg-indigo-950/20 p-4 sm:p-6">
       <h2 className="text-lg font-medium">Preguntale a tus compras</h2>
       <p className="mt-1 text-sm text-slate-400">
-        Escribí una pregunta y Claude la responde con tus carritos finalizados.
+        Escribí una pregunta y te la respondemos con tus carritos finalizados.
       </p>
 
       <form
