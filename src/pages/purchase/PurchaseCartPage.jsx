@@ -108,11 +108,13 @@ function PurchaseCartPage() {
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    if (!newItem.product_name || !newItem.price) return;
+    // An empty price falls back to the product's last price (the placeholder).
+    const price = newItem.price !== "" ? newItem.price : selectedProduct?.last_price;
+    if (!newItem.product_name || price == null || price === "") return;
 
     queueAddCartItem(id, {
       product_name: newItem.product_name,
-      price: parseFloat(newItem.price),
+      price: parseFloat(price),
       quantity: parseInt(newItem.quantity) || 1,
       category_id: newItem.category_id || null,
       ...(newItem.product_id ? { product_id: newItem.product_id } : {}),
@@ -270,7 +272,7 @@ function PurchaseCartPage() {
               value={newItem.price}
               onChange={(e) => setNewItem((p) => ({ ...p, price: e.target.value }))}
               className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-hidden"
-              required
+              required={selectedProduct?.last_price == null}
             />
             <input
               type="number"
