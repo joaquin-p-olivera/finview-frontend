@@ -63,9 +63,18 @@ function HelpPage() {
               <span className="text-slate-200">¿Necesitás los datos en Excel?</span>{" "}
               <PageLink to="/transactions">Transacciones</PageLink> tiene “Exportar CSV”.
             </li>
+            <li>
+              <span className="text-slate-200">¿No querés acordarte otra contraseña?</span> Entrá con
+              “Continuar con Google”: si tu cuenta usa ese mismo Gmail, se vincula sola.
+            </li>
           </ul>
         </section>
       </main>
+      <footer className="pb-8 text-center text-xs text-slate-500">
+        <Link to="/privacidad" className="hover:text-slate-300">
+          Privacidad
+        </Link>
+      </footer>
     </div>
   );
 }

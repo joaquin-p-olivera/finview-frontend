@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { getPurchaseAnalytics, getPurchaseProductPrices } from "../../api/purchase";
 import { getErrorMessage } from "../../api/client";
+import PurchaseAskCard from "../../components/purchase/PurchaseAskCard";
 
 // Fixed order, checked for color-blind separation between neighbors on the
 // dark background. Used for stores, and for categories without a color.
@@ -237,6 +238,7 @@ function PurchaseAnalysisPage() {
           <p className="mb-4 text-sm text-slate-400">
             En qué gastás, cómo cambian los precios y dónde conviene comprar. Solo cuenta carritos finalizados.
           </p>
+          <PurchaseAskCard />
           <div className="flex flex-wrap gap-2">
             {[
               [3, "3 meses"],

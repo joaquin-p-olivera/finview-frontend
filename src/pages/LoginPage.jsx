@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { loginRequest, fetchMe } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import GoogleSignIn from "../components/auth/GoogleSignIn";
 import { useSlowHint, SLOW_HINT_TEXT } from "../components/common/LoadingScreen";
 
 const schema = z.object({
@@ -44,6 +45,7 @@ function LoginPage() {
         <p className="mb-6 text-sm text-slate-400">
           Analizá tus gastos con estados de cuenta y IA.
         </p>
+        <GoogleSignIn />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-200">Email</label>
@@ -89,6 +91,10 @@ function LoginPage() {
         <p className="mt-2 text-center text-xs text-slate-400">
           <Link to="/" className="hover:text-slate-200">
             ¿Qué es Finview?
+          </Link>
+          <span className="mx-2 text-slate-600">·</span>
+          <Link to="/privacidad" className="hover:text-slate-200">
+            Privacidad
           </Link>
         </p>
       </div>

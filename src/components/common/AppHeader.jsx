@@ -132,6 +132,13 @@ function AppHeader({ links = [], showUpload = false, showUser = false, showLogou
                 Cerrar sesión
               </button>
             </div>
+            <Link
+              to="/privacidad"
+              onClick={() => setMenuOpen(false)}
+              className="mt-3 px-3 text-xs text-slate-500 hover:text-slate-300"
+            >
+              Privacidad
+            </Link>
           </nav>
         </>
       )}

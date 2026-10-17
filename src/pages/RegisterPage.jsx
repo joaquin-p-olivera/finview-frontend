@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { registerRequest, loginRequest, fetchMe } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
+import GoogleSignIn from "../components/auth/GoogleSignIn";
 
 const schema = z
   .object({
@@ -55,6 +56,7 @@ function RegisterPage() {
         <p className="mb-6 text-sm text-slate-400">
           Configurá Finview para empezar a analizar tus gastos.
         </p>
+        <GoogleSignIn />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-200">Email</label>
@@ -119,6 +121,13 @@ function RegisterPage() {
           <Link to="/login" className="font-medium text-indigo-400 hover:text-indigo-300">
             Iniciar sesión
           </Link>
+        </p>
+        <p className="mt-2 text-center text-xs text-slate-500">
+          Al crear tu cuenta aceptás la{" "}
+          <Link to="/privacidad" className="text-slate-400 underline hover:text-slate-200">
+            política de privacidad
+          </Link>
+          .
         </p>
       </div>
     </div>

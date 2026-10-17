@@ -176,6 +176,19 @@ export const getPurchaseProductPrices = async (productId) => {
   return data;
 };
 
+export const getPurchaseAskStatus = async () => {
+  const { data } = await api.get("/purchase/ask");
+  return data;
+};
+
+// Claude may take a while: it calls tools over your purchases before answering.
+// A lost response is still retried (the Idempotency-Key replays the answer),
+// but not a 502 from Claude failing, which would spend another question's cost.
+export const askAboutPurchases = async (question) => {
+  const { data } = await api.post("/purchase/ask", { question }, { timeout: 120000, noGatewayRetry: true });
+  return data;
+};
+
 export const getPurchaseStats = async (days = 30) => {
   const { data } = await api.get(`/purchase/stats?days=${days}`);
   return data;
