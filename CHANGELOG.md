@@ -12,6 +12,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - "Continuar con Google" on the login and register pages (Google Identity Services, loaded only there): signs in, links an existing account with the same Gmail, or creates the account and goes to the onboarding. Shown only when `VITE_GOOGLE_CLIENT_ID` is set (repository variable read by the deploy workflow); needs the backend `POST /api/v1/auth/google`. ([#82](https://github.com/joaquin-p-olivera/finview-frontend/pull/82))
 - Privacy page at `/privacidad` (public, linked from the landing, help and login pages, the mobile menu, and a consent line on the register page): what Finview stores and what it doesn't (statement PDFs and forwarded emails are discarded), who data is shared with (Anthropic, Google, Render, Netlify, Resend) and how to ask for an account to be deleted (contact email from `VITE_CONTACT_EMAIL`, a repository variable read by the deploy workflow). It is the privacy policy link of the Google sign-in consent screen. ([#83](https://github.com/joaquin-p-olivera/finview-frontend/pull/83))
 
+### Changed
+
+- Cart: leaving the price empty when adding a product you already bought uses its last price (the "Último: …" shown as placeholder). Without a last price the price is still required. (PRLINK)
+
 ## [1.10.0] - 11 Oct 2026
 
 ### Added
