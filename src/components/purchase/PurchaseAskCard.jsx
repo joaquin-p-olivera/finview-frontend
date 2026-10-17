@@ -8,6 +8,17 @@ const EXAMPLES = [
   "¿Qué productos subieron más de precio en los últimos 3 meses?",
 ];
 const MAX_LENGTH = 500;
+// The backend returns the same amount; the latest answer shows on its own.
+const HISTORY_SIZE = 10;
+const HISTORY_OPEN_KEY = "purchaseAskHistoryOpen";
+
+const readHistoryOpen = () => {
+  try {
+    return localStorage.getItem(HISTORY_OPEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
 
 function AnswerTable({ table }) {
   return (
@@ -53,6 +64,7 @@ function PurchaseAskCard() {
   const [question, setQuestion] = useState("");
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState(null);
+  const [historyOpen, setHistoryOpen] = useState(readHistoryOpen);
 
   useEffect(() => {
     getPurchaseAskStatus().then(setStatus).catch(() => setStatus(null));
@@ -63,6 +75,16 @@ function PurchaseAskCard() {
   const [latest, ...previous] = status.history;
   const remaining = status.remaining_today;
 
+  const toggleHistory = () => {
+    const open = !historyOpen;
+    setHistoryOpen(open);
+    try {
+      localStorage.setItem(HISTORY_OPEN_KEY, open ? "1" : "0");
+    } catch {
+      // Remembering the choice is only a convenience.
+    }
+  };
+
   const ask = async (text) => {
     const trimmed = text.trim();
     if (!trimmed || asking) return;
@@ -72,7 +94,7 @@ function PurchaseAskCard() {
     try {
       const result = await askAboutPurchases(trimmed);
       const { remaining_today, ...item } = result;
-      setStatus((s) => ({ ...s, remaining_today, history: [item, ...s.history] }));
+      setStatus((s) => ({ ...s, remaining_today, history: [item, ...s.history].slice(0, HISTORY_SIZE) }));
       setQuestion("");
     } catch (err) {
       setError(getErrorMessage(err, "No se pudo responder la pregunta"));
@@ -144,18 +166,41 @@ function PurchaseAskCard() {
       )}
 
       {previous.length > 0 && (
-        <details className="mt-4">
-          <summary className="cursor-pointer text-sm text-indigo-400 hover:text-indigo-300">
-            Preguntas anteriores ({previous.length})
-          </summary>
-          <ul className="mt-3 space-y-4">
-            {previous.map((item) => (
-              <li key={item.id} className="border-t border-slate-800 pt-3">
-                <Answer item={item} />
-              </li>
-            ))}
-          </ul>
-        </details>
+        <div className="mt-4 border-t border-slate-800 pt-3">
+          <button
+            type="button"
+            onClick={toggleHistory}
+            aria-expanded={historyOpen}
+            aria-controls="purchase-ask-history"
+            className="flex w-full items-center justify-between gap-3 text-left text-sm text-indigo-400 hover:text-indigo-300"
+          >
+            <span>Preguntas anteriores ({previous.length})</span>
+            <span className="flex items-center gap-1 text-xs">
+              {historyOpen ? "Ocultar" : "Mostrar"}
+              <svg
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+                className={`h-4 w-4 transition-transform ${historyOpen ? "rotate-180" : ""}`}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </span>
+          </button>
+          {historyOpen && (
+            <ul id="purchase-ask-history" className="mt-3 space-y-4">
+              {previous.map((item) => (
+                <li key={item.id} className="border-t border-slate-800 pt-3 first:border-t-0 first:pt-0">
+                  <Answer item={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </section>
   );
