@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Help page "Truquitos": removed the "Continuar con Google" tip and added two new ones (saving a bank's PDF password in Importar por mail, asking your purchases in Análisis). ([#88](https://github.com/joaquin-p-olivera/finview-frontend/pull/88))
+
 ## [1.11.0] - 17 Oct 2026
 
 ### Added

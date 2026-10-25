@@ -64,8 +64,12 @@ function HelpPage() {
               <PageLink to="/transactions">Transacciones</PageLink> tiene “Exportar CSV”.
             </li>
             <li>
-              <span className="text-slate-200">¿No querés acordarte otra contraseña?</span> Entrá con
-              “Continuar con Google”: si tu cuenta usa ese mismo Gmail, se vincula sola.
+              <span className="text-slate-200">¿El banco te manda el PDF con contraseña?</span>{" "}
+              Guardala en <PageLink to="/email-import">Importar por mail</PageLink> y lo abrimos solos.
+            </li>
+            <li>
+              <span className="text-slate-200">¿Dónde está más barata la leche?</span> Preguntáselo
+              a tus compras, en <PageLink to="/purchase/analysis">Análisis</PageLink>.
             </li>
           </ul>
         </section>
