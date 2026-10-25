@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Help page "Truquitos": removed the "Continuar con Google" tip and added two new ones (saving a bank's PDF password in Importar por mail, asking your purchases in Análisis). (PRLINK)
+
 ## [1.11.0] - 17 Oct 2026
 
 ### Added
