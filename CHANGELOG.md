@@ -7,6 +7,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.13.0] - 3 Nov 2026
+
+### Changed
+
+- Bumped `react` and `react-dom` from 19.3.0 to 19.3.1, together (Dependabot's `react`-only PR #94 would have left them on different versions, which React rejects with a blank page, so it was closed once `react-dom` brought both). ([#99](https://github.com/joaquin-p-olivera/finview-frontend/pull/99))
+- Bumped `react-router-dom` from 7.18.4 to 7.18.5. ([#91](https://github.com/joaquin-p-olivera/finview-frontend/pull/91))
+- Bumped `@vitejs/plugin-react` from 6.1.1 to 6.1.2. ([#92](https://github.com/joaquin-p-olivera/finview-frontend/pull/92))
+- Bumped `axios` from 1.20.0 to 1.21.0. ([#93](https://github.com/joaquin-p-olivera/finview-frontend/pull/93))
+- Bumped `vite` from 8.3.1 to 8.3.5. ([#95](https://github.com/joaquin-p-olivera/finview-frontend/pull/95))
+- Bumped `zustand` from 5.0.15 to 5.0.16. ([#96](https://github.com/joaquin-p-olivera/finview-frontend/pull/96))
+- Bumped `react-hook-form` from 7.89.0 to 7.91.0. ([#97](https://github.com/joaquin-p-olivera/finview-frontend/pull/97))
+- Bumped `@hookform/resolvers` from 5.9.1 to 7.0.0 (the major versions only break the Effect and TypeBox resolvers; Finview uses the zod one). ([#98](https://github.com/joaquin-p-olivera/finview-frontend/pull/98))
+- Bumped `zod` from 4.6.5 to 4.6.7. ([#100](https://github.com/joaquin-p-olivera/finview-frontend/pull/100))
+
 ## [1.12.0] - 25 Oct 2026
 
 ### Changed
